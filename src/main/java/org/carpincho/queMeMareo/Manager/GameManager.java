@@ -7,7 +7,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.carpincho.queMeMareo.QueMeMareo;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
@@ -32,10 +31,10 @@ public class GameManager {
 
     private final double eyeX = 10739;
     private final double eyeZ = -23823;
-
+    private final double eyeY = -43;
+    private final double obstacleTargetY = -42;
 
     private final double minDistance = 5.0;
-
 
     private GameManager(JavaPlugin plugin) {
         this.players = new ArrayList<>();
@@ -44,7 +43,6 @@ public class GameManager {
         this.plugin = plugin;
     }
 
-
     public static GameManager getInstance(JavaPlugin plugin) {
         if (instance == null) {
             instance = new GameManager(plugin);
@@ -52,78 +50,78 @@ public class GameManager {
         return instance;
     }
 
-
     public void startGame() {
-        if (gameActive) {
-            return;
-        }
+        if (gameActive) return;
+
         gameActive = true;
+        gameWon = false;
+        currentEyeSize = 3.0;
+        playerLaps.clear();
+        playerQuadrants.clear();
+
         Bukkit.getLogger().info("Juego iniciado. Tamaño inicial del ojo: " + currentEyeSize);
         spawnEye();
         spawnObstacles();
         trackPlayer();
     }
 
-
     public void spawnEye() {
         World world = Bukkit.getWorld("world");
-        double x = 10739;
-        double y = -41;
-        double z = -23823;
+        if (world == null) return;
 
         if (eye != null) {
             eye.removeItemDisplay();
         }
 
-        eye = new ItemDisplayManager(world, x, y, z);
+        eye = new ItemDisplayManager(world, eyeX, eyeY, eyeZ);
         eye.setItemStack(new ItemStack(Material.ENDER_EYE));
         eye.setSize(currentEyeSize);
 
-        Bukkit.getLogger().info("Ojo creado en la posición: " + x + ", " + y + ", " + z);
+        Bukkit.getLogger().info("Ojo creado en la posición: " + eyeX + ", " + eyeY + ", " + eyeZ);
     }
 
-
     private void trackPlayer() {
-        plugin.getServer().getScheduler().runTaskTimer(plugin, () -> {
-            if (gameActive && eye != null) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!gameActive || eye == null) {
+                    cancel();
+                    return;
+                }
+
                 Player closestPlayer = getClosestPlayer();
                 if (closestPlayer != null) {
                     eye.lookAt(closestPlayer.getLocation());
                 }
             }
-        }, 0L, 20L);
+        }.runTaskTimer(plugin, 0L, 20L);
     }
-
 
     private Player getClosestPlayer() {
-        Player closestPlayer = null;
-        double closestDistance = Double.MAX_VALUE;
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            double distance = eye.getLocation().distance(player.getLocation());
-            if (distance < closestDistance) {
-                closestDistance = distance;
-                closestPlayer = player;
-            }
-        }
-        return closestPlayer;
-    }
+        if (Bukkit.getOnlinePlayers().isEmpty()) return null;
 
+        return Bukkit.getOnlinePlayers().stream()
+                .min(Comparator.comparingDouble(p -> p.getLocation().distance(eye.getLocation())))
+                .orElse(null);
+    }
 
     private void spawnObstacles() {
         World world = Bukkit.getWorld("world");
+        if (world == null) return;
+
         obstacles.clear();
 
         for (int i = 0; i < maxObstacles; i++) {
-            double x = 10731 + random.nextDouble() * (10747 - 10731);
-            double y = 20;
-            double z = -23831 + random.nextDouble() * (-23815 - (-23831));
+            double x = 10731 + random.nextDouble() * 16;
+            double y = eyeY + 5;
+            double z = -23831 + random.nextDouble() * 16;
 
             ItemDisplayManager itemDisplay = new ItemDisplayManager(world, x, y, z);
             itemDisplay.setItemStack(new ItemStack(Material.STICK));
             obstacles.add(itemDisplay);
 
             double fallSpeed = 0.3;
-            double targetY = -42;
+            double targetY = obstacleTargetY;
 
             new BukkitRunnable() {
                 double currentY = y;
@@ -135,30 +133,29 @@ public class GameManager {
                         itemDisplay.updatePosition(x, currentY, z);
                     } else {
                         cancel();
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                itemDisplay.removeItemDisplay();
+                                obstacles.remove(itemDisplay);
+                            }
+                        }.runTaskLater(plugin, 100L);
                     }
                 }
             }.runTaskTimer(plugin, 0, 1);
         }
     }
 
-
-
     public void playerCompletedLap(Player player) {
-        if (gameWon) return;
-        if (eye == null) {
-            Bukkit.getLogger().warning("El ojo aún no está inicializado.");
-            return;
-        }
+        if (gameWon || eye == null) return;
 
         Location loc = player.getLocation();
         String quadrant = getQuadrant(loc);
 
         if (quadrant == null) return;
 
-
         Set<String> visitedQuadrants = playerQuadrants.computeIfAbsent(player, k -> new HashSet<>());
         visitedQuadrants.add(quadrant);
-
 
         if (visitedQuadrants.size() == 4) {
             playerLaps.put(player, playerLaps.getOrDefault(player, 0) + 1);
@@ -168,20 +165,22 @@ public class GameManager {
             Bukkit.getLogger().info(player.getName() + " ha completado " + laps + " vueltas.");
 
             if (laps >= requiredLaps) {
-                playerLaps.put(player, 0);
-
-                if (currentEyeSize > minEyeSize) {
-                    currentEyeSize -= eyeSizeDecrease;
-                    eye.setSize(currentEyeSize);
-                    Bukkit.getLogger().info("Nuevo tamaño del ojo: " + currentEyeSize);
-                }
-
-                if (currentEyeSize <= minEyeSize) {
-                    currentEyeSize = minEyeSize;
-                    gameWon = true;
-                    Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage("¡El ojo ha desaparecido! ¡Has ganado el juego!"));
-                }
+                shrinkEye();
             }
+        }
+    }
+
+    private void shrinkEye() {
+        if (currentEyeSize > minEyeSize) {
+            currentEyeSize -= eyeSizeDecrease;
+            eye.setSize(currentEyeSize);
+            Bukkit.getLogger().info("Nuevo tamaño del ojo: " + currentEyeSize);
+        }
+
+        if (currentEyeSize <= minEyeSize) {
+            gameWon = true;
+            Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage("¡El ojo ha desaparecido! ¡Has ganado el juego!"));
+            stopGame();
         }
     }
 
@@ -199,24 +198,23 @@ public class GameManager {
         return null;
     }
 
-
-
-
     public void freezePlayer(Player player) {
         player.setWalkSpeed(0);
-        Bukkit.getScheduler().runTaskLater(plugin, () -> player.setWalkSpeed(0.2f), 20L * 3);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                player.setWalkSpeed(0.2f);
+            }
+        }.runTaskLater(plugin, 60L);
     }
-
 
     public List<ItemDisplayManager> getObstacles() {
         return obstacles;
     }
 
-    // Detiene el juego
     public void stopGame() {
-        if (!gameActive) {
-            return;
-        }
+        if (!gameActive) return;
+
         gameActive = false;
         gameWon = false;
         currentEyeSize = 3.0;
