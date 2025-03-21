@@ -1,19 +1,17 @@
 package org.carpincho.queMeMareo.Manager;
 
-
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.carpincho.queMeMareo.QueMeMareo;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class GameManager {
 
@@ -28,14 +26,16 @@ public class GameManager {
     private final double eyeSizeDecrease = 0.05;
     private boolean gameWon = false;
     private boolean gameActive = false;
-    private final JavaPlugin plugin; // Referencia al plugin
+    private final JavaPlugin plugin;
+
 
     private GameManager(JavaPlugin plugin) {
         this.players = new ArrayList<>();
         this.obstacles = new ArrayList<>();
         this.random = new Random();
-        this.plugin = plugin; // Guarda la referencia del plugin
+        this.plugin = plugin;
     }
+
 
     public static GameManager getInstance(JavaPlugin plugin) {
         if (instance == null) {
@@ -43,6 +43,7 @@ public class GameManager {
         }
         return instance;
     }
+
 
     public void startGame() {
         if (gameActive) {
@@ -54,6 +55,7 @@ public class GameManager {
         spawnObstacles();
         trackPlayer();
     }
+
 
     public void spawnEye() {
         World world = Bukkit.getWorld("world");
@@ -72,8 +74,9 @@ public class GameManager {
         Bukkit.getLogger().info("Ojo creado en la posición: " + x + ", " + y + ", " + z);
     }
 
+
     private void trackPlayer() {
-        plugin.getScheduler().runTaskTimer(plugin, () -> {
+        plugin.getServer().getScheduler().runTaskTimer(plugin, () -> {
             if (gameActive && eye != null) {
                 Player closestPlayer = getClosestPlayer();
                 if (closestPlayer != null) {
@@ -82,6 +85,7 @@ public class GameManager {
             }
         }, 0L, 20L);
     }
+
 
     private Player getClosestPlayer() {
         Player closestPlayer = null;
@@ -95,6 +99,7 @@ public class GameManager {
         }
         return closestPlayer;
     }
+
 
     private void spawnObstacles() {
         World world = Bukkit.getWorld("world");
@@ -126,11 +131,12 @@ public class GameManager {
                         cancel();
                     }
                 }
-            }.runTaskTimer(plugin, 0, 1); // Usa la referencia al plugin aquí
+            }.runTaskTimer(plugin, 0, 1);
 
             Bukkit.getLogger().info("Obstáculo creado en la posición: " + x + ", " + y + ", " + z);
         }
     }
+
 
     public void playerCompletedLap(Player player) {
         if (!gameWon) {
@@ -152,15 +158,18 @@ public class GameManager {
         }
     }
 
+
     public void freezePlayer(Player player) {
         player.setWalkSpeed(0);
         Bukkit.getScheduler().runTaskLater(plugin, () -> player.setWalkSpeed(0.2f), 20L * 3);
     }
 
+
     public List<ItemDisplayManager> getObstacles() {
         return obstacles;
     }
 
+    // Detiene el juego
     public void stopGame() {
         if (!gameActive) {
             return;

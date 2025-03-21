@@ -5,9 +5,9 @@ api-version: '1.21'
 commands:
 
 
-  iniciarJuego:
+  startGame:
     description: Inicia el juego Que me Mareo.
-    usage: /iniciarJuego
+    usage: /startGame
     permission: queMeMareo.iniciarJuego
     permission-message: No tienes permiso para iniciar el juego.
 

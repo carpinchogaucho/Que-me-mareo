@@ -20,11 +20,11 @@ public class QueMeMareo extends JavaPlugin {
         gameManager.startGame();
 
 
-        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 
 
         this.getCommand("startgame").setExecutor(new StartGameCommand(this));
-        getCommand("stopgame").setExecutor(new StopGameCommand());
+        getCommand("stopgame").setExecutor(new StopGameCommand(this));
     }
 
     @Override
