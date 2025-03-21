@@ -1,6 +1,7 @@
 package org.carpincho.queMeMareo.Manager;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -9,9 +10,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.carpincho.queMeMareo.QueMeMareo;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class GameManager {
 
@@ -27,6 +26,15 @@ public class GameManager {
     private boolean gameWon = false;
     private boolean gameActive = false;
     private final JavaPlugin plugin;
+    private final Map<Player, Integer> playerLaps = new HashMap<>();
+    private final int requiredLaps = 3;
+    private final Map<Player, Set<String>> playerQuadrants = new HashMap<>();
+
+    private final double eyeX = 10739;
+    private final double eyeZ = -23823;
+
+
+    private final double minDistance = 5.0;
 
 
     private GameManager(JavaPlugin plugin) {
@@ -60,7 +68,7 @@ public class GameManager {
     public void spawnEye() {
         World world = Bukkit.getWorld("world");
         double x = 10739;
-        double y = -42;
+        double y = -41;
         double z = -23823;
 
         if (eye != null) {
@@ -107,40 +115,61 @@ public class GameManager {
 
         for (int i = 0; i < maxObstacles; i++) {
             double x = 10731 + random.nextDouble() * (10747 - 10731);
-            double y = 10;
+            double y = 20;
             double z = -23831 + random.nextDouble() * (-23815 - (-23831));
 
             ItemDisplayManager itemDisplay = new ItemDisplayManager(world, x, y, z);
             itemDisplay.setItemStack(new ItemStack(Material.STICK));
             obstacles.add(itemDisplay);
 
-            int fallTime = 20;
+            double fallSpeed = 0.3;
             double targetY = -42;
 
             new BukkitRunnable() {
-                int ticks = 0;
-                double startY = y;
+                double currentY = y;
 
                 @Override
                 public void run() {
-                    if (ticks < fallTime) {
-                        double newY = startY - (startY - targetY) * ((double) ticks / fallTime);
-                        itemDisplay.updatePosition(x, newY, z);
-                        ticks++;
+                    if (currentY > targetY) {
+                        currentY -= fallSpeed;
+                        itemDisplay.updatePosition(x, currentY, z);
                     } else {
                         cancel();
                     }
                 }
             }.runTaskTimer(plugin, 0, 1);
-
-            Bukkit.getLogger().info("Obstáculo creado en la posición: " + x + ", " + y + ", " + z);
         }
     }
 
 
+
     public void playerCompletedLap(Player player) {
-        if (!gameWon) {
-            if (eye != null) {
+        if (gameWon) return;
+        if (eye == null) {
+            Bukkit.getLogger().warning("El ojo aún no está inicializado.");
+            return;
+        }
+
+        Location loc = player.getLocation();
+        String quadrant = getQuadrant(loc);
+
+        if (quadrant == null) return;
+
+
+        Set<String> visitedQuadrants = playerQuadrants.computeIfAbsent(player, k -> new HashSet<>());
+        visitedQuadrants.add(quadrant);
+
+
+        if (visitedQuadrants.size() == 4) {
+            playerLaps.put(player, playerLaps.getOrDefault(player, 0) + 1);
+            visitedQuadrants.clear();
+
+            int laps = playerLaps.get(player);
+            Bukkit.getLogger().info(player.getName() + " ha completado " + laps + " vueltas.");
+
+            if (laps >= requiredLaps) {
+                playerLaps.put(player, 0);
+
                 if (currentEyeSize > minEyeSize) {
                     currentEyeSize -= eyeSizeDecrease;
                     eye.setSize(currentEyeSize);
@@ -152,11 +181,25 @@ public class GameManager {
                     gameWon = true;
                     Bukkit.getOnlinePlayers().forEach(p -> p.sendMessage("¡El ojo ha desaparecido! ¡Has ganado el juego!"));
                 }
-            } else {
-                Bukkit.getLogger().warning("El ojo aún no está inicializado.");
             }
         }
     }
+
+    private String getQuadrant(Location loc) {
+        double dx = loc.getX() - eyeX;
+        double dz = loc.getZ() - eyeZ;
+
+        if (Math.sqrt(dx * dx + dz * dz) > minDistance) return null;
+
+        if (dx > 0 && dz > 0) return "NE";
+        if (dx > 0 && dz < 0) return "SE";
+        if (dx < 0 && dz > 0) return "NW";
+        if (dx < 0 && dz < 0) return "SW";
+
+        return null;
+    }
+
+
 
 
     public void freezePlayer(Player player) {
