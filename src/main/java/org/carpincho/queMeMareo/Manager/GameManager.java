@@ -29,9 +29,9 @@ public class GameManager {
     private final int requiredLaps = 3;
     private final Map<Player, Set<String>> playerQuadrants = new HashMap<>();
 
-    private final double eyeX = 10739;
-    private final double eyeZ = -23823;
-    private final double eyeY = -43;
+    private final double eyeX = 10740;
+    private final double eyeZ = -23822;
+    private final double eyeY = -41;
     private final double obstacleTargetY = -42;
 
     private final double minDistance = 5.0;
