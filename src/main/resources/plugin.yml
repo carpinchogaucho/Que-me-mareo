@@ -1,0 +1,19 @@
+name: Quememareo
+version: '1.0'
+main: org.carpincho.queMeMareo.QueMeMareo
+api-version: '1.21'
+commands:
+
+
+  startGame:
+    description: Inicia el juego Que me Mareo.
+    usage: /startGame
+    permission: queMeMareo.iniciarJuego
+    permission-message: No tienes permiso para iniciar el juego.
+
+
+  stopgame:
+    description: Detiene el juego
+    usage: /<command>
+    permission: queMeMareo.stop
+    permission-message: No tienes permisos para ejecutar este comando.
