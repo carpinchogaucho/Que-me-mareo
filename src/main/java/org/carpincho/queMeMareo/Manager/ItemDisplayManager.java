@@ -49,6 +49,10 @@ public class ItemDisplayManager {
         updateScale();
     }
 
+    public double getSize() {
+        return this.itemDisplay.getTransformation().getScale().x();
+    }
+
     public void setItemStack(ItemStack itemStack) {
         itemDisplay.setItemStack(itemStack);
     }
