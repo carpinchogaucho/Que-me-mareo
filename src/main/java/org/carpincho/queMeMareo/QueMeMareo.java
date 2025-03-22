@@ -3,7 +3,6 @@ package org.carpincho.queMeMareo;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.carpincho.queMeMareo.Listener.PlayerListener;
 import org.carpincho.queMeMareo.Manager.GameManager;
-import org.carpincho.queMeMareo.commands.ClearItemsCommand;
 import org.carpincho.queMeMareo.commands.RestarPuntosCommand;
 import org.carpincho.queMeMareo.commands.StartGameCommand;
 import org.carpincho.queMeMareo.commands.StopGameCommand;
@@ -27,7 +26,6 @@ public class QueMeMareo extends JavaPlugin {
 
         this.getCommand("startgame").setExecutor(new StartGameCommand(this));
         getCommand("stopgame").setExecutor(new StopGameCommand(this));
-        getCommand("clearitems").setExecutor(new ClearItemsCommand(gameManager));
         getCommand("restarPuntos").setExecutor(new RestarPuntosCommand());
     }
 
