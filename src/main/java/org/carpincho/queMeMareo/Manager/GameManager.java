@@ -28,6 +28,7 @@ public class GameManager {
     private final double eyeSizeDecrease = 0.05;
     private final int requiredLaps = 3;
     private final JavaPlugin plugin;
+    private final PlayerManager playerManager;
 
     private final double eyeX = 10740;
     private final double eyeZ = -23822;
@@ -43,6 +44,7 @@ public class GameManager {
         this.obstacles = new ArrayList<>();
         this.random = new Random();
         this.plugin = plugin;
+        this.playerManager = new PlayerManager(plugin);
     }
 
 
@@ -419,6 +421,12 @@ public class GameManager {
         playerQuadrants.clear();
         winners.clear();
 
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            playerManager.addPlayerToGame(player);
+        }
+
+        Bukkit.getLogger().info("Juego iniciado para los jugadores permitidos.");
+
         Bukkit.getLogger().info("Juego iniciado para todos los jugadores.");
         spawnEyeForPlayers();
         spawnObstacles();
@@ -615,9 +623,12 @@ public class GameManager {
         if (!gameActive) return;
 
         gameActive = false;
+        playerManager.clearPlayers();
+        
         for (ItemDisplayManager eye : playerEyes.values()) {
             eye.removeItemDisplay();
         }
+
         playerEyes.clear();
         obstacles.forEach(ItemDisplayManager::removeItemDisplay);
         obstacles.clear();

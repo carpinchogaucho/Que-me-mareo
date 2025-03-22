@@ -18,7 +18,7 @@ public class QueMeMareo extends JavaPlugin {
         getLogger().info("Que me mareo plugin enabled!");
 
         gameManager = GameManager.getInstance(this);
-        gameManager.startGame();
+
 
 
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
