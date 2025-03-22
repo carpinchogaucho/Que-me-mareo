@@ -624,14 +624,22 @@ public class GameManager {
 
         gameActive = false;
         playerManager.clearPlayers();
-        
-        for (ItemDisplayManager eye : playerEyes.values()) {
+
+
+        for (ItemDisplayManager eye : new ArrayList<>(playerEyes.values())) {
             eye.removeItemDisplay();
         }
-
         playerEyes.clear();
-        obstacles.forEach(ItemDisplayManager::removeItemDisplay);
+
+
+        for (ItemDisplayManager obstacle : new ArrayList<>(obstacles)) {
+            obstacle.removeItemDisplay();
+        }
         obstacles.clear();
+
+
+        Bukkit.getScheduler().cancelTasks(plugin);
+
         winners.clear();
 
         Bukkit.getOnlinePlayers().forEach(player -> player.sendMessage("¡El juego ha sido detenido!"));
