@@ -30,7 +30,6 @@ public class GameManager {
 
     private final double eyeX = 10740;
     private final double eyeZ = -23822;
-    private final double eyeY = -41;
     private final double obstacleTargetY = -42;
     private final double minDistance = 5.0;
 
@@ -43,6 +42,24 @@ public class GameManager {
         this.random = new Random();
         this.plugin = plugin;
     }
+
+    private final List<Location[]> eyeAreas = Arrays.asList(
+            new Location[]{new Location(Bukkit.getWorld("world"), 10731, -41, -23815), new Location(Bukkit.getWorld("world"), 10747, -41, -23831)},
+            new Location[]{new Location(Bukkit.getWorld("world"), 10731, -41, -23797), new Location(Bukkit.getWorld("world"), 10747, -41, -23813)},
+            new Location[]{new Location(Bukkit.getWorld("world"), 10713, -41, -23813), new Location(Bukkit.getWorld("world"), 10713, -41, -23787)},
+            new Location[]{new Location(Bukkit.getWorld("world"), 10711, -41, -23813), new Location(Bukkit.getWorld("world"), 10695, -41, -23797)},
+            new Location[]{new Location(Bukkit.getWorld("world"), 10711, -41, -23815), new Location(Bukkit.getWorld("world"), 10695, -41, -23831)},
+            new Location[]{new Location(Bukkit.getWorld("world"), 10711, -41, -23833), new Location(Bukkit.getWorld("world"), 10695, -41, -23849)}
+    );
+
+    private final List<Location[]> obstacleAreas = Arrays.asList(
+            new Location[]{new Location(Bukkit.getWorld("world"), 10731, -43, -23815), new Location(Bukkit.getWorld("world"), 10747, -41, -23831)},
+            new Location[]{new Location(Bukkit.getWorld("world"), 10731, -43, -23797), new Location(Bukkit.getWorld("world"), 10747, -41, -23813)},
+            new Location[]{new Location(Bukkit.getWorld("world"), 10713, -43, -23813), new Location(Bukkit.getWorld("world"), 10713, -41, -23787)},
+            new Location[]{new Location(Bukkit.getWorld("world"), 10711, -43, -23813), new Location(Bukkit.getWorld("world"), 10695, -41, -23797)},
+            new Location[]{new Location(Bukkit.getWorld("world"), 10711, -43, -23815), new Location(Bukkit.getWorld("world"), 10695, -41, -23831)},
+            new Location[]{new Location(Bukkit.getWorld("world"), 10711, -43, -23833), new Location(Bukkit.getWorld("world"), 10695, -41, -23849)}
+    );
 
     public static GameManager getInstance(JavaPlugin plugin) {
         if (instance == null) {
@@ -69,15 +86,24 @@ public class GameManager {
         World world = Bukkit.getWorld("world");
         if (world == null) return;
 
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (winners.contains(player)) continue;
+        for (Location[] area : eyeAreas) {
+            Location firstPos = area[0];
+            Location secondPos = area[1];
 
-            ItemDisplayManager eye = new ItemDisplayManager(world, eyeX, eyeY, eyeZ);
-            eye.setItemStack(new ItemStack(Material.ENDER_EYE));
-            eye.setSize(3.0);
-            playerEyes.put(player, eye);
+            double centerX = (firstPos.getX() + secondPos.getX()) / 2;
+            double centerZ = (firstPos.getZ() + secondPos.getZ()) / 2;
+            double centerY = firstPos.getY();
 
-            Bukkit.getLogger().info("Ojo creado para " + player.getName() + " en la posición: " + eyeX + ", " + eyeY + ", " + eyeZ);
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                if (winners.contains(player)) continue;
+
+                ItemDisplayManager eye = new ItemDisplayManager(world, centerX, centerY, centerZ);
+                eye.setItemStack(new ItemStack(Material.ENDER_EYE));
+                eye.setSize(3.0);
+                playerEyes.put(player, eye);
+
+                Bukkit.getLogger().info("Ojo creado en la posición: " + centerX + ", " + centerY + ", " + centerZ);
+            }
         }
     }
 
@@ -152,10 +178,18 @@ public class GameManager {
 
         obstacles.clear();
 
-        for (int i = 0; i < maxObstacles; i++) {
-            double x = 10731 + random.nextDouble() * 16;
-            double y = eyeY + 5;
-            double z = -23831 + random.nextDouble() * 16;
+        for (Location[] area : obstacleAreas) {
+            Location firstPos = area[0];
+            Location secondPos = area[1];
+
+            double minX = Math.min(firstPos.getX(), secondPos.getX());
+            double maxX = Math.max(firstPos.getX(), secondPos.getX());
+            double minZ = Math.min(firstPos.getZ(), secondPos.getZ());
+            double maxZ = Math.max(firstPos.getZ(), secondPos.getZ());
+
+            double x = minX + random.nextDouble() * (maxX - minX);
+            double z = minZ + random.nextDouble() * (maxZ - minZ);
+            double y = firstPos.getY() + 5; // Empieza cayendo desde arriba
 
             ItemDisplayManager itemDisplay = new ItemDisplayManager(world, x, y, z);
             itemDisplay.setItemStack(new ItemStack(Material.STICK));
@@ -179,7 +213,6 @@ public class GameManager {
                             public void run() {
                                 itemDisplay.removeItemDisplay();
                                 obstacles.remove(itemDisplay);
-
 
                                 if (obstacles.isEmpty()) {
                                     spawnObstacles();

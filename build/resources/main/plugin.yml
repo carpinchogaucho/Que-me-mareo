@@ -17,3 +17,12 @@ commands:
     usage: /<command>
     permission: queMeMareo.stop
     permission-message: No tienes permisos para ejecutar este comando.
+
+  clearitems:
+    description: Elimina todos los obstáculos y ojos del juego.
+    usage: /clearitems
+    permission: queMeMareo.clearitems
+  permissions:
+    queMeMareo.clearitems:
+      description: Permite usar el comando /clearitems
+      default: op
