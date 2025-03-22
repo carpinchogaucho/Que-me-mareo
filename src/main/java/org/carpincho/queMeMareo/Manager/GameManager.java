@@ -43,22 +43,363 @@ public class GameManager {
         this.plugin = plugin;
     }
 
+
     private final List<Location[]> eyeAreas = Arrays.asList(
+            //1 listo
             new Location[]{new Location(Bukkit.getWorld("world"), 10731, -41, -23815), new Location(Bukkit.getWorld("world"), 10747, -41, -23831)},
+            //2 listo
             new Location[]{new Location(Bukkit.getWorld("world"), 10731, -41, -23797), new Location(Bukkit.getWorld("world"), 10747, -41, -23813)},
-            new Location[]{new Location(Bukkit.getWorld("world"), 10713, -41, -23813), new Location(Bukkit.getWorld("world"), 10713, -41, -23787)},
+            //3 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10729, -41, -23813), new Location(Bukkit.getWorld("world"), 10713, -41, -23797)},
+            //4 listo
             new Location[]{new Location(Bukkit.getWorld("world"), 10711, -41, -23813), new Location(Bukkit.getWorld("world"), 10695, -41, -23797)},
+            //5 listo
             new Location[]{new Location(Bukkit.getWorld("world"), 10711, -41, -23815), new Location(Bukkit.getWorld("world"), 10695, -41, -23831)},
-            new Location[]{new Location(Bukkit.getWorld("world"), 10711, -41, -23833), new Location(Bukkit.getWorld("world"), 10695, -41, -23849)}
+            //6 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10711, -41, -23833), new Location(Bukkit.getWorld("world"), 10695, -41, -23849)},
+            //7 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10693, -41, -23797), new Location(Bukkit.getWorld("world"), 10678, -41, -23813)},
+            //8 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10693, -41, -23795), new Location(Bukkit.getWorld("world"), 10678, -41, -23779)},
+            //9 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10711, -41, -23795), new Location(Bukkit.getWorld("world"), 10695, -41, -23779)},
+            //10 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10729, -41, -23795), new Location(Bukkit.getWorld("world"), 10713, -41, -23779)},
+            //11 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10747, -41, -23795), new Location(Bukkit.getWorld("world"), 10731, -41, -23779)},
+            //12 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10765, -41, -23795), new Location(Bukkit.getWorld("world"), 10749, -41, -23779)},
+            //13 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10783, -41, -23795), new Location(Bukkit.getWorld("world"), 10767, -41, -23779)},
+            //14 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10801, -41, -23795), new Location(Bukkit.getWorld("world"), 10785, -41, -23779)},
+            //15 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10819, -41, -23795), new Location(Bukkit.getWorld("world"), 10803, -41, -23779)},
+            //16 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10803, -41, -23761), new Location(Bukkit.getWorld("world"), 10819, -41, -23777)},
+            //17 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10785, -41, -23761), new Location(Bukkit.getWorld("world"), 10801, -41, -23777)},
+            //18 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10767, -41, -23777), new Location(Bukkit.getWorld("world"), 10783, -41, -23761)},
+            //19 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10765, -41, -23761), new Location(Bukkit.getWorld("world"), 10749, -41, -23777)},
+            //20 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10747, -41, -23777), new Location(Bukkit.getWorld("world"), 10731, -41, -23761)},
+            //21 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10729, -41, -23777), new Location(Bukkit.getWorld("world"), 10713, -41, -23761)},
+            //22 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10695, -41, -23761), new Location(Bukkit.getWorld("world"), 10711, -41, -23777)},
+            //23 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10678, -41, -23777), new Location(Bukkit.getWorld("world"), 10693, -41, -23761)},
+            //24 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10693, -41, -23743), new Location(Bukkit.getWorld("world"), 10678, -41, -23759)},
+            //25 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10695, -41, -23743), new Location(Bukkit.getWorld("world"), 10711, -41, -23759)},
+            //26 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10713, -41, -23743), new Location(Bukkit.getWorld("world"), 10729, -41, -23759)},
+            //27 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10731, -41, -23759), new Location(Bukkit.getWorld("world"), 10747, -41, -23743)},
+            //28 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10749, -41, -23743), new Location(Bukkit.getWorld("world"), 10765, -41, -23759)},
+            //29 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10783, -41, -23743), new Location(Bukkit.getWorld("world"), 10767, -41, -23759)},
+            //30 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10801, -41, -23759), new Location(Bukkit.getWorld("world"), 10785, -41, -23743)},
+            //31 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10803, -41, -23743), new Location(Bukkit.getWorld("world"), 10819, -41, -23759)},
+            //32 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10819, -41, -23741), new Location(Bukkit.getWorld("world"), 10803, -41, -23725)},
+            //33 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10801, -41, -23741), new Location(Bukkit.getWorld("world"), 10785, -41, -23725)},
+            //34 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10783, -41, -23741), new Location(Bukkit.getWorld("world"), 10767, -41, -23725)},
+            //35 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10765, -41, -23741), new Location(Bukkit.getWorld("world"), 10749, -41, -23725)},
+
+            //36 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10747, -41, -23741), new Location(Bukkit.getWorld("world"), 10731, -41, -23725)},
+
+            //37 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10729, -41, -23741), new Location(Bukkit.getWorld("world"), 10713, -41, -23725)},
+
+            //38 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10711, -41, -23741), new Location(Bukkit.getWorld("world"), 10695, -41, -23725)},
+
+            //39 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10693, -41, -23741), new Location(Bukkit.getWorld("world"), 10678, -41, -23725)},
+
+            //40 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10678, -41, -23833), new Location(Bukkit.getWorld("world"), 10693, -41, -23849)},
+
+            //41 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10729, -41, -23833), new Location(Bukkit.getWorld("world"), 10713, -41, -23849)},
+
+            //42 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10747, -41, -23833), new Location(Bukkit.getWorld("world"), 10731, -41, -23849)},
+
+            //43 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10765, -41, -23833), new Location(Bukkit.getWorld("world"), 10749, -41, -23849)},
+
+            //44 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10767, -41, -23833), new Location(Bukkit.getWorld("world"), 10783, -41, -23849)},
+
+            //45 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10785, -41, -23833), new Location(Bukkit.getWorld("world"), 10801, -41, -23849)},
+
+            //46 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10819, -41, -23833), new Location(Bukkit.getWorld("world"), 10803, -41, -23849)},
+
+            //47 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10819, -41, -23867), new Location(Bukkit.getWorld("world"), 10803, -41, -23851)},
+
+            //48 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10801, -41, -23867), new Location(Bukkit.getWorld("world"), 10785, -41, -23851)},
+
+            //49 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10783, -41, -23867), new Location(Bukkit.getWorld("world"), 10767, -41, -23851)},
+
+            //50 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10765, -41, -23867), new Location(Bukkit.getWorld("world"), 10749, -41, -23851)},
+
+            //60 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10747, -41, -23867), new Location(Bukkit.getWorld("world"), 10731, -41, -23851)},
+
+            //61 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10729, -41, -23867), new Location(Bukkit.getWorld("world"), 10713, -41, -23851)},
+
+            //62 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10711, -41, -23867), new Location(Bukkit.getWorld("world"), 10695, -41, -23851)},
+
+            //63 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10693, -41, -23867), new Location(Bukkit.getWorld("world"), 10678, -41, -23851)},
+
+            //64 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10678, -41, -23869), new Location(Bukkit.getWorld("world"), 10693, -41, -23885)},
+
+            //65 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10695, -41, -23869), new Location(Bukkit.getWorld("world"), 10711, -41, -23885)},
+
+            //66 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10713, -41, -23869), new Location(Bukkit.getWorld("world"), 10729, -41, -23885)},
+
+            //67 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10731, -41, -23869), new Location(Bukkit.getWorld("world"), 10747, -41, -23885)},
+
+            //68 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10749, -41, -23869), new Location(Bukkit.getWorld("world"), 10765, -41, -23885)},
+
+            //69 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10767, -41, -23869), new Location(Bukkit.getWorld("world"), 10783, -41, -23885)},
+
+            //70 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10801, -41, -23885), new Location(Bukkit.getWorld("world"), 10785, -41, -23869)},
+
+            //71 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10803, -41, -23885), new Location(Bukkit.getWorld("world"), 10819, -41, -23869)},
+
+            //72 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10819, -41, -23887), new Location(Bukkit.getWorld("world"), 10803, -41, -23903)},
+
+            //73 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10801, -41, -23903), new Location(Bukkit.getWorld("world"), 10785, -41, -23887)},
+
+            //74 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10783, -41, -23903), new Location(Bukkit.getWorld("world"), 10767, -41, -23887)},
+
+            //75 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10765, -41, -23903), new Location(Bukkit.getWorld("world"), 10749, -41, -23887)},
+
+            //76 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10747, -41, -23903), new Location(Bukkit.getWorld("world"), 10731, -41, -23887)},
+
+            //77 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10729, -41, -23903), new Location(Bukkit.getWorld("world"), 10713, -41, -23887)},
+
+            //78 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10711, -41, -23903), new Location(Bukkit.getWorld("world"), 10695, -41, -23887)},
+
+            //79
+            new Location[]{new Location(Bukkit.getWorld("world"), 10693, -41, -23887), new Location(Bukkit.getWorld("world"), 10678, -41, -23903)}
+
     );
 
     private final List<Location[]> obstacleAreas = Arrays.asList(
+            //1 listo
             new Location[]{new Location(Bukkit.getWorld("world"), 10731, -43, -23815), new Location(Bukkit.getWorld("world"), 10747, -41, -23831)},
+            //2 listo
             new Location[]{new Location(Bukkit.getWorld("world"), 10731, -43, -23797), new Location(Bukkit.getWorld("world"), 10747, -41, -23813)},
-            new Location[]{new Location(Bukkit.getWorld("world"), 10713, -43, -23813), new Location(Bukkit.getWorld("world"), 10713, -41, -23787)},
+            //3 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10729, -43, -23813), new Location(Bukkit.getWorld("world"), 10713, -41, -23797)},
+            //4 listo
             new Location[]{new Location(Bukkit.getWorld("world"), 10711, -43, -23813), new Location(Bukkit.getWorld("world"), 10695, -41, -23797)},
+            //5 listo
             new Location[]{new Location(Bukkit.getWorld("world"), 10711, -43, -23815), new Location(Bukkit.getWorld("world"), 10695, -41, -23831)},
-            new Location[]{new Location(Bukkit.getWorld("world"), 10711, -43, -23833), new Location(Bukkit.getWorld("world"), 10695, -41, -23849)}
+            //6 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10711, -43, -23833), new Location(Bukkit.getWorld("world"), 10695, -41, -23849)},
+            //7 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10693, -43, -23797), new Location(Bukkit.getWorld("world"), 10678, -41, -23813)},
+            //8 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10693, -43, -23795), new Location(Bukkit.getWorld("world"), 10678, -41, -23779)},
+            //9 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10711, -43, -23795), new Location(Bukkit.getWorld("world"), 10695, -41, -23779)},
+            //10 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10729, -43, -23795), new Location(Bukkit.getWorld("world"), 10713, -41, -23779)},
+            //11 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10747, -43, -23795), new Location(Bukkit.getWorld("world"), 10731, -41, -23779)},
+            //12 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10765, -43, -23795), new Location(Bukkit.getWorld("world"), 10749, -41, -23779)},
+            //13 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10783, -43, -23795), new Location(Bukkit.getWorld("world"), 10767, -41, -23779)},
+            //14 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10801, -43, -23795), new Location(Bukkit.getWorld("world"), 10785, -41, -23779)},
+            //15 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10819, -43, -23795), new Location(Bukkit.getWorld("world"), 10803, -41, -23779)},
+            //16 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10803, -43, -23761), new Location(Bukkit.getWorld("world"), 10819, -41, -23777)},
+            //17 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10785, -43, -23761), new Location(Bukkit.getWorld("world"), 10801, -41, -23777)},
+            //18 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10767, -43, -23777), new Location(Bukkit.getWorld("world"), 10783, -41, -23761)},
+            //19 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10765, -43, -23761), new Location(Bukkit.getWorld("world"), 10749, -41, -23777)},
+            //20 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10747, -43, -23777), new Location(Bukkit.getWorld("world"), 10731, -41, -23761)},
+            //21 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10729, -43, -23777), new Location(Bukkit.getWorld("world"), 10713, -41, -23761)},
+            //22 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10695, -43, -23761), new Location(Bukkit.getWorld("world"), 10711, -41, -23777)},
+            //23 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10678, -43, -23777), new Location(Bukkit.getWorld("world"), 10693, -41, -23761)},
+            //24 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10693, -43, -23743), new Location(Bukkit.getWorld("world"), 10678, -41, -23759)},
+            //25 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10695, -43, -23743), new Location(Bukkit.getWorld("world"), 10711, -41, -23759)},
+            //26 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10713, -43, -23743), new Location(Bukkit.getWorld("world"), 10729, -41, -23759)},
+            //27 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10731, -43, -23759), new Location(Bukkit.getWorld("world"), 10747, -41, -23743)},
+            //28 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10749, -43, -23743), new Location(Bukkit.getWorld("world"), 10765, -41, -23759)},
+            //29 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10783, -43, -23743), new Location(Bukkit.getWorld("world"), 10767, -41, -23759)},
+            //30 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10801, -43, -23759), new Location(Bukkit.getWorld("world"), 10785, -41, -23743)},
+            //31 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10803, -43, -23743), new Location(Bukkit.getWorld("world"), 10819, -41, -23759)},
+            //32 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10819, -43, -23741), new Location(Bukkit.getWorld("world"), 10803, -41, -23725)},
+            //33 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10801, -43, -23741), new Location(Bukkit.getWorld("world"), 10785, -41, -23725)},
+            //34 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10783, -43, -23741), new Location(Bukkit.getWorld("world"), 10767, -41, -23725)},
+            //35 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10765, -43, -23741), new Location(Bukkit.getWorld("world"), 10749, -41, -23725)},
+
+            //36 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10747, -43, -23741), new Location(Bukkit.getWorld("world"), 10731, -41, -23725)},
+
+            //37 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10729, -43, -23741), new Location(Bukkit.getWorld("world"), 10713, -41, -23725)},
+
+            //38 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10711, -43, -23741), new Location(Bukkit.getWorld("world"), 10695, -41, -23725)},
+
+            //39 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10693, -43, -23741), new Location(Bukkit.getWorld("world"), 10678, -41, -23725)},
+
+            //40 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10678, -43, -23833), new Location(Bukkit.getWorld("world"), 10693, -41, -23849)},
+
+            //41 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10729, -43, -23833), new Location(Bukkit.getWorld("world"), 10713, -41, -23849)},
+
+            //42 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10747, -43, -23833), new Location(Bukkit.getWorld("world"), 10731, -41, -23849)},
+
+            //43 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10765, -43, -23833), new Location(Bukkit.getWorld("world"), 10749, -41, -23849)},
+
+            //44 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10767, -43, -23833), new Location(Bukkit.getWorld("world"), 10783, -41, -23849)},
+
+            //45 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10785, -43, -23833), new Location(Bukkit.getWorld("world"), 10801, -41, -23849)},
+
+            //46 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10819, -43, -23833), new Location(Bukkit.getWorld("world"), 10803, -41, -23849)},
+
+            //47 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10819, -43, -23867), new Location(Bukkit.getWorld("world"), 10803, -41, -23851)},
+
+            //48 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10801, -43, -23867), new Location(Bukkit.getWorld("world"), 10785, -41, -23851)},
+
+            //49 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10783, -43, -23867), new Location(Bukkit.getWorld("world"), 10767, -41, -23851)},
+
+            //50 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10765, -43, -23867), new Location(Bukkit.getWorld("world"), 10749, -41, -23851)},
+
+            //60 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10747, -43, -23867), new Location(Bukkit.getWorld("world"), 10731, -41, -23851)},
+
+            //61 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10729, -43, -23867), new Location(Bukkit.getWorld("world"), 10713, -41, -23851)},
+
+            //62 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10711, -43, -23867), new Location(Bukkit.getWorld("world"), 10695, -41, -23851)},
+
+            //63 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10693, -43, -23867), new Location(Bukkit.getWorld("world"), 10678, -41, -23851)},
+
+            //64 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10678, -43, -23869), new Location(Bukkit.getWorld("world"), 10693, -41, -23885)},
+
+            //65 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10695, -43, -23869), new Location(Bukkit.getWorld("world"), 10711, -41, -23885)},
+
+            //66 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10713, -43, -23869), new Location(Bukkit.getWorld("world"), 10729, -41, -23885)},
+
+            //67 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10731, -43, -23869), new Location(Bukkit.getWorld("world"), 10747, -41, -23885)},
+
+            //68 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10749, -43, -23869), new Location(Bukkit.getWorld("world"), 10765, -41, -23885)},
+
+            //69 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10767, -43, -23869), new Location(Bukkit.getWorld("world"), 10783, -41, -23885)},
+
+            //70 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10801, -43, -23885), new Location(Bukkit.getWorld("world"), 10785, -41, -23869)},
+
+            //71 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10803, -43, -23885), new Location(Bukkit.getWorld("world"), 10819, -41, -23869)},
+
+            //72 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10819, -43, -23887), new Location(Bukkit.getWorld("world"), 10803, -41, -23903)},
+
+            //73 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10801, -43, -23903), new Location(Bukkit.getWorld("world"), 10785, -41, -23887)},
+
+            //74 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10783, -43, -23903), new Location(Bukkit.getWorld("world"), 10767, -41, -23887)},
+
+            //75 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10765, -43, -23903), new Location(Bukkit.getWorld("world"), 10749, -41, -23887)},
+
+            //76 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10747, -43, -23903), new Location(Bukkit.getWorld("world"), 10731, -41, -23887)},
+
+            //77 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10729, -43, -23903), new Location(Bukkit.getWorld("world"), 10713, -41, -23887)},
+
+            //78 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10711, -43, -23903), new Location(Bukkit.getWorld("world"), 10695, -41, -23887)},
+
+            //79
+            new Location[]{new Location(Bukkit.getWorld("world"), 10693, -43, -23887), new Location(Bukkit.getWorld("world"), 10678, -41, -23903)}
+
     );
 
     public static GameManager getInstance(JavaPlugin plugin) {
