@@ -20,6 +20,7 @@ public class GameManager {
     private final Map<Player, Integer> playerLaps = new HashMap<>();
     private final Map<Player, Set<String>> playerQuadrants = new HashMap<>();
     private final Set<Player> winners = new HashSet<>();
+    private final Map<Player, Integer> playerPoints = new HashMap<>();
 
     private final Random random;
     private final int maxObstacles = 10;
@@ -32,6 +33,7 @@ public class GameManager {
     private final double eyeZ = -23822;
     private final double obstacleTargetY = -42;
     private final double minDistance = 5.0;
+
 
     private boolean gameActive = false;
 
@@ -509,8 +511,23 @@ public class GameManager {
             winners.add(player);
             eye.removeItemDisplay();
             playerEyes.remove(player);
-            player.sendMessage("¡Tu ojo ha desaparecido! ¡Has ganado el juego!");
+
+
+            int currentPoints = playerPoints.getOrDefault(player, 0);
+            playerPoints.put(player, currentPoints + 10);
+
+            player.sendMessage("¡Tu ojo ha desaparecido! Has ganado 10 puntos.");
+            Bukkit.getLogger().info(player.getName() + " ha ganado 10 puntos. Total: " + playerPoints.get(player));
         }
+    }
+
+    public void removePoints(Player player, int amount) {
+        int currentPoints = playerPoints.getOrDefault(player, 0);
+        int newPoints = Math.max(0, currentPoints - amount);
+        playerPoints.put(player, newPoints);
+
+        player.sendMessage("Te han restado " + amount + " puntos. Ahora tienes: " + newPoints);
+        Bukkit.getLogger().info(player.getName() + " ha perdido " + amount + " puntos. Total: " + newPoints);
     }
 
     private void spawnObstacles() {
@@ -530,7 +547,7 @@ public class GameManager {
 
             double x = minX + random.nextDouble() * (maxX - minX);
             double z = minZ + random.nextDouble() * (maxZ - minZ);
-            double y = firstPos.getY() + 5; // Empieza cayendo desde arriba
+            double y = firstPos.getY() + 5;
 
             ItemDisplayManager itemDisplay = new ItemDisplayManager(world, x, y, z);
             itemDisplay.setItemStack(new ItemStack(Material.STICK));

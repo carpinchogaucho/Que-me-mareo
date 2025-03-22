@@ -2,9 +2,16 @@ name: Quememareo
 version: '1.0'
 main: org.carpincho.queMeMareo.QueMeMareo
 api-version: '1.21'
+
+
+
+
+
+
+
+
+
 commands:
-
-
   startGame:
     description: Inicia el juego Que me Mareo.
     usage: /startGame
@@ -18,11 +25,7 @@ commands:
     permission: queMeMareo.stop
     permission-message: No tienes permisos para ejecutar este comando.
 
-  clearitems:
-    description: Elimina todos los obstáculos y ojos del juego.
-    usage: /clearitems
-    permission: queMeMareo.clearitems
-  permissions:
-    queMeMareo.clearitems:
-      description: Permite usar el comando /clearitems
-      default: op
+  restarPuntos:
+    description: Resta 20 puntos a un jugador.
+    usage: /restarPuntos <jugador>
+    permission: queMeMareo.restarpuntos
