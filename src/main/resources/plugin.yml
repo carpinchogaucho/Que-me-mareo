@@ -3,15 +3,12 @@ version: '1.0'
 main: org.carpincho.queMeMareo.QueMeMareo
 api-version: '1.21'
 author: carpinchogaucho
-
-
 commands:
   startGame:
     description: Inicia el juego Que me Mareo.
     usage: /startGame
     permission: queMeMareo.iniciarJuego
     permission-message: No tienes permiso para iniciar el juego.
-
 
   stopgame:
     description: Detiene el juego
@@ -45,3 +42,9 @@ commands:
     description: Detiene la partida de Miss Universo.
     usage: /stopmissuniverso
     permission: queMeMareo.stop
+
+  balance-register:
+    description: Registra jugadores.
+    usage: /balance-register [player]
+    permission: bookbalance.admin
+    permission-message: No tienes permiso para usar este comando.
