@@ -1,4 +1,5 @@
 Plugin creado para el evento de AldoGeo 
 
 
-https://pbs.twimg.com/profile_images/1741891211370070016/XsxSyLbf_400x400.jpg
+![image](https://github.com/user-attachments/assets/5239a9d8-f4ef-40ae-95a1-378d3461095c)
+
