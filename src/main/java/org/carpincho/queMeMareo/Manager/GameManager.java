@@ -1,9 +1,6 @@
 package org.carpincho.queMeMareo.Manager;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -469,12 +466,33 @@ public class GameManager {
             playerManager.addPlayerToGame(player);
         }
 
-        Bukkit.getLogger().info("Juego iniciado para los jugadores permitidos.");
+        new BukkitRunnable() {
+            int countdown = 3;
 
-        Bukkit.getLogger().info("Juego iniciado para todos los jugadores.");
-        spawnEyeForPlayers();
-        spawnObstacles();
-        trackPlayers();
+            @Override
+            public void run() {
+                if (countdown > 0) {
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        player.sendTitle("§e" + countdown, "", 0, 20, 10);
+                        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
+                    }
+                    countdown--;
+                } else {
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        player.sendTitle("§a¡Comienza!", "", 0, 20, 10);
+                        player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.5f);
+                    }
+
+                    Bukkit.getLogger().info("Juego iniciado para todos los jugadores.");
+
+                    spawnEyeForPlayers();
+                    spawnObstacles();
+                    trackPlayers();
+
+                    cancel();
+                }
+            }
+        }.runTaskTimer(plugin, 0L, 20L);
     }
 
     private void spawnEyeForPlayers() {
@@ -665,6 +683,8 @@ public class GameManager {
         if (!gameActive) return;
 
         gameActive = false;
+
+
         playerManager.clearPlayers();
 
 
@@ -680,10 +700,22 @@ public class GameManager {
         obstacles.clear();
 
 
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            player.setWalkSpeed(0.2f);
+        }
+
+
         Bukkit.getScheduler().cancelTasks(plugin);
 
+
+        playerLaps.clear();
+        playerQuadrants.clear();
         winners.clear();
+        playerPoints.clear();
+
 
         Bukkit.getOnlinePlayers().forEach(player -> player.sendMessage("¡El juego ha sido detenido!"));
+
+        Bukkit.getLogger().info("El juego se ha detenido por completo.");
     }
 }
