@@ -222,8 +222,30 @@ public class GameManager {
             //78 listo
             new Location[]{new Location(Bukkit.getWorld("world"), 10711, -41, -23903), new Location(Bukkit.getWorld("world"), 10695, -41, -23887)},
 
-            //79
-            new Location[]{new Location(Bukkit.getWorld("world"), 10693, -41, -23887), new Location(Bukkit.getWorld("world"), 10678, -41, -23903)}
+            //79 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10693, -41, -23887), new Location(Bukkit.getWorld("world"), 10678, -41, -23903)},
+
+            new Location[]{new Location(Bukkit.getWorld("world"), 10819, -41, -23831), new Location(Bukkit.getWorld("world"), 10803, -41, -23815)},
+
+            new Location[]{new Location(Bukkit.getWorld("world"), 10801, -41, -23831), new Location(Bukkit.getWorld("world"), 10785, -41, -23815)},
+
+            new Location[]{new Location(Bukkit.getWorld("world"), 10783, -41, -23831), new Location(Bukkit.getWorld("world"), 10767, -41, -23815)},
+
+            new Location[]{new Location(Bukkit.getWorld("world"), 10765, -41, -23831), new Location(Bukkit.getWorld("world"), 10749, -41, -23815)},
+
+            new Location[]{new Location(Bukkit.getWorld("world"), 10729, -41, -23815), new Location(Bukkit.getWorld("world"), 10713, -41, -23831)},
+
+            new Location[]{new Location(Bukkit.getWorld("world"), 10693, -41, -23831), new Location(Bukkit.getWorld("world"), 10678, -41, -23815)},
+
+            new Location[]{new Location(Bukkit.getWorld("world"), 10765, -41, -23813), new Location(Bukkit.getWorld("world"), 10749, -41, -23797)},
+
+            new Location[]{new Location(Bukkit.getWorld("world"), 10783, -41, -23813), new Location(Bukkit.getWorld("world"), 10767, -41, -23797)},
+
+            new Location[]{new Location(Bukkit.getWorld("world"), 10801, -41, -23813), new Location(Bukkit.getWorld("world"), 10785, -41, -23797)},
+
+            new Location[]{new Location(Bukkit.getWorld("world"), 10819, -41, -23813), new Location(Bukkit.getWorld("world"), 10803, -41, -23797)},
+
+            new Location[]{new Location(Bukkit.getWorld("world"), 10711, -41, -23903), new Location(Bukkit.getWorld("world"), 10695, -41, -23887)}
 
     );
 
@@ -401,8 +423,30 @@ public class GameManager {
             //78 listo
             new Location[]{new Location(Bukkit.getWorld("world"), 10711, -43, -23903), new Location(Bukkit.getWorld("world"), 10695, -41, -23887)},
 
-            //79
-            new Location[]{new Location(Bukkit.getWorld("world"), 10693, -43, -23887), new Location(Bukkit.getWorld("world"), 10678, -41, -23903)}
+            //79 listo
+            new Location[]{new Location(Bukkit.getWorld("world"), 10693, -43, -23887), new Location(Bukkit.getWorld("world"), 10678, -41, -23903)},
+
+            new Location[]{new Location(Bukkit.getWorld("world"), 10819, -43, -23831), new Location(Bukkit.getWorld("world"), 10803, -41, -23815)},
+
+            new Location[]{new Location(Bukkit.getWorld("world"), 10801, -43, -23831), new Location(Bukkit.getWorld("world"), 10785, -41, -23815)},
+
+            new Location[]{new Location(Bukkit.getWorld("world"), 10783, -43, -23831), new Location(Bukkit.getWorld("world"), 10767, -41, -23815)},
+
+            new Location[]{new Location(Bukkit.getWorld("world"), 10765, -43, -23831), new Location(Bukkit.getWorld("world"), 10749, -41, -23815)},
+
+            new Location[]{new Location(Bukkit.getWorld("world"), 10729, -43, -23815), new Location(Bukkit.getWorld("world"), 10713, -41, -23831)},
+
+            new Location[]{new Location(Bukkit.getWorld("world"), 10693, -43, -23831), new Location(Bukkit.getWorld("world"), 10678, -41, -23815)},
+
+            new Location[]{new Location(Bukkit.getWorld("world"), 10765, -43, -23813), new Location(Bukkit.getWorld("world"), 10749, -41, -23797)},
+
+            new Location[]{new Location(Bukkit.getWorld("world"), 10783, -43, -23813), new Location(Bukkit.getWorld("world"), 10767, -41, -23797)},
+
+            new Location[]{new Location(Bukkit.getWorld("world"), 10801, -43, -23813), new Location(Bukkit.getWorld("world"), 10785, -41, -23797)},
+
+            new Location[]{new Location(Bukkit.getWorld("world"), 10819, -43, -23813), new Location(Bukkit.getWorld("world"), 10803, -41, -23797)},
+
+            new Location[]{new Location(Bukkit.getWorld("world"), 10711, -43, -23903), new Location(Bukkit.getWorld("world"), 10695, -41, -23887)}
 
     );
 
