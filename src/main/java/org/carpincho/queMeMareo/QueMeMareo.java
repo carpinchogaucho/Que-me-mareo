@@ -7,6 +7,7 @@ import org.carpincho.queMeMareo.Manager.GameManager;
 import org.carpincho.queMeMareo.MissUniverso.Listener.GameListener;
 import org.carpincho.queMeMareo.MissUniverso.commandMissUniverso.BalanceRegisterCommand;
 import org.carpincho.queMeMareo.MissUniverso.commandMissUniverso.BalanceStartCommand;
+import org.carpincho.queMeMareo.MissUniverso.commandMissUniverso.StopMissUniverso;
 import org.carpincho.queMeMareo.MissUniverso.manager.GameManagerMissUnirverso;
 import org.carpincho.queMeMareo.commands.RestarPuntosCommand;
 import org.carpincho.queMeMareo.commands.StartGameCommand;
@@ -36,6 +37,7 @@ public class QueMeMareo extends JavaPlugin {
         //MISS UNIVERSO
         this.getCommand("balance-start").setExecutor(new BalanceStartCommand(this));
         this.getCommand("balance-register").setExecutor(new BalanceRegisterCommand(this));
+        getCommand("stopmissuniverso").setExecutor(new StopMissUniverso(GameManagerMissUnirverso));
 
         //QUE ME MAREO
         this.getCommand("startgame").setExecutor(new StartGameCommand(this));

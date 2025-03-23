@@ -40,3 +40,8 @@ commands:
     bookbalance.admin:
       description: Permite a los administradores iniciar el juego para otros jugadores.
       default: op
+
+  stopmissuniverso:
+    description: Detiene la partida de Miss Universo.
+    usage: /stopmissuniverso
+    permission: queMeMareo.stop
