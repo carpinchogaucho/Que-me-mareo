@@ -453,7 +453,7 @@ public class GameManager {
                 eye.setSize(3.0);
                 playerEyes.put(player, eye);
 
-                Bukkit.getLogger().info("Ojo creado en la posición: " + centerX + ", " + centerY + ", " + centerZ);
+
             }
         }
     }
@@ -495,7 +495,7 @@ public class GameManager {
             visitedQuadrants.clear();
 
             int laps = playerLaps.get(player);
-            Bukkit.getLogger().info(player.getName() + " ha completado " + laps + " vueltas.");
+
 
             if (laps >= requiredLaps) {
                 shrinkEye(player);
@@ -512,7 +512,7 @@ public class GameManager {
         if (currentEyeSize > minEyeSize) {
             currentEyeSize -= eyeSizeDecrease;
             eye.setSize(currentEyeSize);
-            Bukkit.getLogger().info("Nuevo tamaño del ojo de " + player.getName() + ": " + currentEyeSize);
+
         }
 
         if (currentEyeSize <= minEyeSize) {
@@ -525,7 +525,6 @@ public class GameManager {
             playerPoints.put(player, currentPoints + 10);
 
             player.sendMessage("¡Tu ojo ha desaparecido! Has ganado 10 puntos.");
-            Bukkit.getLogger().info(player.getName() + " ha ganado 10 puntos. Total: " + playerPoints.get(player));
         }
     }
 
@@ -535,7 +534,6 @@ public class GameManager {
         playerPoints.put(player, newPoints);
 
         player.sendMessage("Te han restado " + amount + " puntos. Ahora tienes: " + newPoints);
-        Bukkit.getLogger().info(player.getName() + " ha perdido " + amount + " puntos. Total: " + newPoints);
     }
 
     private void spawnObstacles() {
