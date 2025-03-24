@@ -1,6 +1,7 @@
 package org.carpincho.queMeMareo.MissUniverso.manager;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.carpincho.queMeMareo.QueMeMareo;
@@ -27,8 +28,6 @@ public class GameManagerMissUnirverso {
         return playerScore;
     }
 
-    //
-
     public void registerPlayer(Player player, BalanceItemManager item) {
         playersItems.put(player.getUniqueId(), item);
     }
@@ -47,26 +46,22 @@ public class GameManagerMissUnirverso {
 
         switch (round) {
             case 1:
-
                 playersItems.values().forEach(item -> {
                     item.setBalanceAxis(BalanceItemManager.BalanceAxis.X);
                     item.setTiltSpeed(0.01 * currentRound);
                 });
-
                 break;
             case 2:
                 playersItems.values().forEach(item -> {
                     item.setBalanceAxis(BalanceItemManager.BalanceAxis.Z);
                     item.setTiltSpeed(0.01 * currentRound);
                 });
-
                 break;
             default:
                 playersItems.values().forEach(item -> {
                     item.setBalanceAxis(BalanceItemManager.BalanceAxis.X);
                     item.setTiltSpeed(0.02 * currentRound);
                 });
-
                 break;
         }
 
@@ -101,5 +96,15 @@ public class GameManagerMissUnirverso {
 
     public boolean isPlaying() {
         return playing;
+    }
+
+    public void onBookFall(Player player) {
+        if (!playersItems.containsKey(player.getUniqueId())) return;
+
+        player.sendMessage("¡Perdiste el libro! Pasaste al modo espectador.");
+        player.setGameMode(GameMode.SPECTATOR);
+
+
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "restarPuntos " + player.getName());
     }
 }

@@ -123,6 +123,11 @@ public class BalanceItemManager {
         }
 
         if (Math.abs(tilt) > maxTilt) {
+            player = Bukkit.getPlayer(playerUuid);
+            if (player != null) {
+                GameManagerMissUnirverso gameManager = QueMeMareo.getInstance().getGameManagerMissUnirverso();
+                gameManager.onBookFall(player);
+            }
             disappear(true);
             return;
         }

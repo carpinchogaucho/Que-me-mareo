@@ -23,7 +23,7 @@ public class GameManager {
     private final int maxObstacles = 10;
     private final double minEyeSize = 0.1;
     private final double eyeSizeDecrease = 0.05;
-    private final int requiredLaps = 3;
+    private final int requiredLaps = 2;
     private final JavaPlugin plugin;
     private final PlayerManager playerManager;
 
@@ -463,7 +463,9 @@ public class GameManager {
         winners.clear();
 
         for (Player player : Bukkit.getOnlinePlayers()) {
-            playerManager.addPlayerToGame(player);
+            if (player.getGameMode() == GameMode.SURVIVAL || player.getGameMode() == GameMode.ADVENTURE) {
+                playerManager.addPlayerToGame(player);
+            }
         }
 
         new BukkitRunnable() {
@@ -483,7 +485,7 @@ public class GameManager {
                         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.5f);
                     }
 
-                    Bukkit.getLogger().info("Juego iniciado para todos los jugadores.");
+                    Bukkit.getLogger().info("Juego iniciado para todos los jugadores en Survival o Adventure.");
 
                     spawnEyeForPlayers();
                     spawnObstacles();
@@ -574,7 +576,6 @@ public class GameManager {
         if (currentEyeSize > minEyeSize) {
             currentEyeSize -= eyeSizeDecrease;
             eye.setSize(currentEyeSize);
-
         }
 
         if (currentEyeSize <= minEyeSize) {
@@ -582,11 +583,14 @@ public class GameManager {
             eye.removeItemDisplay();
             playerEyes.remove(player);
 
-
             int currentPoints = playerPoints.getOrDefault(player, 0);
             playerPoints.put(player, currentPoints + 10);
 
             player.sendMessage("¡Tu ojo ha desaparecido! Has ganado 10 puntos.");
+
+
+            player.setGameMode(GameMode.SPECTATOR);
+            player.sendMessage("Has completado la ronda y ahora estás en modo espectador.");
         }
     }
 
@@ -684,35 +688,37 @@ public class GameManager {
 
         gameActive = false;
 
-
         playerManager.clearPlayers();
 
 
-        for (ItemDisplayManager eye : new ArrayList<>(playerEyes.values())) {
+        for (Map.Entry<Player, ItemDisplayManager> entry : new HashMap<>(playerEyes).entrySet()) {
+            Player player = entry.getKey();
+            ItemDisplayManager eye = entry.getValue();
+
+            if (eye != null) {
+
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "restarPuntos " + player.getName());
+            }
+
             eye.removeItemDisplay();
         }
         playerEyes.clear();
-
 
         for (ItemDisplayManager obstacle : new ArrayList<>(obstacles)) {
             obstacle.removeItemDisplay();
         }
         obstacles.clear();
 
-
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.setWalkSpeed(0.2f);
         }
 
-
         Bukkit.getScheduler().cancelTasks(plugin);
-
 
         playerLaps.clear();
         playerQuadrants.clear();
         winners.clear();
         playerPoints.clear();
-
 
         Bukkit.getOnlinePlayers().forEach(player -> player.sendMessage("¡El juego ha sido detenido!"));
 
