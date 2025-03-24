@@ -1,5 +1,6 @@
 package org.carpincho.queMeMareo.Manager;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -55,6 +56,19 @@ public class ItemDisplayManager {
 
     public void setItemStack(ItemStack itemStack) {
         itemDisplay.setItemStack(itemStack);
+    }
+
+    public void setCustomName(String name) {
+        if (itemDisplay != null) {
+            itemDisplay.customName(Component.text(name));
+            itemDisplay.setCustomNameVisible(false);
+        }
+    }
+
+    public void setCustomNameVisible(boolean visible) {
+        if (itemDisplay != null) {
+            itemDisplay.setCustomNameVisible(visible);
+        }
     }
 
     public void lookAt(Location target) {

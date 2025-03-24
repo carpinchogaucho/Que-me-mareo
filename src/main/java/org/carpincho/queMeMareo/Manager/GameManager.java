@@ -1,6 +1,8 @@
 package org.carpincho.queMeMareo.Manager;
 
 import org.bukkit.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -515,9 +517,12 @@ public class GameManager {
                 ItemDisplayManager eye = new ItemDisplayManager(world, centerX, centerY, centerZ);
                 eye.setItemStack(new ItemStack(Material.ENDER_EYE));
                 eye.setSize(3.0);
+
+
+                eye.setCustomName("GameEye_" + player.getUniqueId());
+                eye.setCustomNameVisible(false);
+
                 playerEyes.put(player, eye);
-
-
             }
         }
     }
@@ -549,17 +554,22 @@ public class GameManager {
         Location loc = player.getLocation();
         String quadrant = getQuadrant(loc);
 
-        if (quadrant == null) return;
+        if (quadrant == null) {
+            player.sendMessage("§cNo estás en un cuadrante válido.");
+            return;
+        }
 
         Set<String> visitedQuadrants = playerQuadrants.computeIfAbsent(player, k -> new HashSet<>());
         visitedQuadrants.add(quadrant);
+
+        player.sendMessage("§aCuadrantes visitados: " + visitedQuadrants);
 
         if (visitedQuadrants.size() == 4) {
             playerLaps.put(player, playerLaps.getOrDefault(player, 0) + 1);
             visitedQuadrants.clear();
 
             int laps = playerLaps.get(player);
-
+            player.sendMessage("§bHas completado " + laps + " vueltas.");
 
             if (laps >= requiredLaps) {
                 shrinkEye(player);
@@ -573,9 +583,12 @@ public class GameManager {
         ItemDisplayManager eye = playerEyes.get(player);
         double currentEyeSize = eye.getSize();
 
+        player.sendMessage("§eTamaño actual del ojo: " + currentEyeSize);
+
         if (currentEyeSize > minEyeSize) {
             currentEyeSize -= eyeSizeDecrease;
             eye.setSize(currentEyeSize);
+            player.sendMessage("§a¡El ojo se ha reducido a " + currentEyeSize + "!");
         }
 
         if (currentEyeSize <= minEyeSize) {
@@ -587,7 +600,6 @@ public class GameManager {
             playerPoints.put(player, currentPoints + 10);
 
             player.sendMessage("¡Tu ojo ha desaparecido! Has ganado 10 puntos.");
-
 
             player.setGameMode(GameMode.SPECTATOR);
             player.sendMessage("Has completado la ronda y ahora estás en modo espectador.");
@@ -690,25 +702,27 @@ public class GameManager {
 
         playerManager.clearPlayers();
 
-
-        for (Map.Entry<Player, ItemDisplayManager> entry : new HashMap<>(playerEyes).entrySet()) {
-            Player player = entry.getKey();
-            ItemDisplayManager eye = entry.getValue();
-
-            if (eye != null) {
-
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "restarPuntos " + player.getName());
+        // 🔹 Remover ojos por nombre en el mundo
+        for (World world : Bukkit.getWorlds()) {
+            for (Entity entity : world.getEntities()) {
+                if (entity instanceof ItemDisplay itemDisplay) {
+                    if (itemDisplay.getCustomName() != null && itemDisplay.getCustomName().startsWith("GameEye_")) {
+                        itemDisplay.remove();
+                    }
+                }
             }
-
-            eye.removeItemDisplay();
         }
+
+        // 🔹 Limpiar la lista de ojos
         playerEyes.clear();
 
+        // 🔹 Eliminar obstáculos
         for (ItemDisplayManager obstacle : new ArrayList<>(obstacles)) {
             obstacle.removeItemDisplay();
         }
         obstacles.clear();
 
+        // 🔹 Restaurar velocidad de jugadores
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.setWalkSpeed(0.2f);
         }
@@ -721,7 +735,6 @@ public class GameManager {
         playerPoints.clear();
 
         Bukkit.getOnlinePlayers().forEach(player -> player.sendMessage("¡El juego ha sido detenido!"));
-
         Bukkit.getLogger().info("El juego se ha detenido por completo.");
     }
 }

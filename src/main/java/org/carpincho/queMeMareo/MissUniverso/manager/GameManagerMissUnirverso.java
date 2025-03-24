@@ -2,6 +2,7 @@ package org.carpincho.queMeMareo.MissUniverso.manager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.carpincho.queMeMareo.QueMeMareo;
@@ -43,36 +44,39 @@ public class GameManagerMissUnirverso {
     public void start(int round) {
         playing = true;
         currentRound = round;
+        playersItems.clear(); // Limpiar datos previos
 
-        switch (round) {
-            case 1:
-                playersItems.values().forEach(item -> {
-                    item.setBalanceAxis(BalanceItemManager.BalanceAxis.X);
-                    item.setTiltSpeed(0.01 * currentRound);
-                });
-                break;
-            case 2:
-                playersItems.values().forEach(item -> {
-                    item.setBalanceAxis(BalanceItemManager.BalanceAxis.Z);
-                    item.setTiltSpeed(0.01 * currentRound);
-                });
-                break;
-            default:
-                playersItems.values().forEach(item -> {
-                    item.setBalanceAxis(BalanceItemManager.BalanceAxis.X);
-                    item.setTiltSpeed(0.02 * currentRound);
-                });
-                break;
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (player.getGameMode() == GameMode.SURVIVAL || player.getGameMode() == GameMode.ADVENTURE) {
+
+                UUID playerUUID = player.getUniqueId();
+                Location playerLocation = player.getLocation();
+
+
+                BalanceItemManager balanceItemManager = new BalanceItemManager(playerUUID, playerLocation);
+                playersItems.put(playerUUID, balanceItemManager);
+
+                switch (round) {
+                    case 1:
+                        balanceItemManager.setBalanceAxis(BalanceItemManager.BalanceAxis.X);
+                        balanceItemManager.setTiltSpeed(0.01 * currentRound);
+                        break;
+                    case 2:
+                        balanceItemManager.setBalanceAxis(BalanceItemManager.BalanceAxis.Z);
+                        balanceItemManager.setTiltSpeed(0.01 * currentRound);
+                        break;
+                    default:
+                        balanceItemManager.setBalanceAxis(BalanceItemManager.BalanceAxis.X);
+                        balanceItemManager.setTiltSpeed(0.02 * currentRound);
+                        break;
+                }
+
+                player.sendMessage("¡La ronda " + currentRound + " ha comenzado!");
+                balanceItemManager.disappear(false);
+                balanceItemManager.startBalancing();
+            }
         }
-
-        playersItems.forEach((uuid, balanceItemManager) -> {
-            Player p = Bukkit.getPlayer(uuid);
-            if (p == null) return;
-
-            p.sendMessage("¡La ronda " + currentRound + " ha comenzado!");
-            balanceItemManager.disappear(false);
-            balanceItemManager.startBalancing();
-        });
 
         new BukkitRunnable() {
             @Override
@@ -81,6 +85,7 @@ public class GameManagerMissUnirverso {
             }
         }.runTaskLater(plugin, 20 * 60);
     }
+
 
     public void stop() {
         playing = false;
@@ -92,11 +97,14 @@ public class GameManagerMissUnirverso {
             p.sendMessage("¡La ronda " + currentRound + " ha terminado!");
             balanceItemManager.reset();
         });
+
+        playersItems.clear();
     }
 
     public boolean isPlaying() {
         return playing;
     }
+
 
     public void onBookFall(Player player) {
         if (!playersItems.containsKey(player.getUniqueId())) return;
