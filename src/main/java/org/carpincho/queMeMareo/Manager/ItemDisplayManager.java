@@ -9,6 +9,7 @@ import org.bukkit.entity.ItemDisplay;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
+import org.joml.Vector3f;
 
 public class ItemDisplayManager {
 
@@ -48,6 +49,7 @@ public class ItemDisplayManager {
     public void setSize(double size) {
         this.scale = (float) size;
         updateScale();
+        Bukkit.getLogger().info("Nueva escala asignada al ItemDisplay: " + size);
     }
 
     public double getSize() {
@@ -103,12 +105,24 @@ public class ItemDisplayManager {
     }
 
     private void updateScale() {
-        Transformation transformation = itemDisplay.getTransformation();
-        transformation.getScale().set(scale, scale, scale);
-        itemDisplay.setTransformation(transformation);
+        if (itemDisplay != null) {
+            Transformation currentTransformation = itemDisplay.getTransformation();
 
+            // Convertimos la escala a Vector3f
+            Vector3f newScale = new Vector3f((float) scale, (float) scale, (float) scale);
 
-        Bukkit.getLogger().info("Escala actualizada del ItemDisplay: " + scale);
+            // Creamos una nueva transformación con la escala actualizada
+            Transformation newTransformation = new Transformation(
+                    currentTransformation.getTranslation(),
+                    currentTransformation.getLeftRotation(),
+                    newScale, // Aplicamos el nuevo tamaño
+                    currentTransformation.getRightRotation()
+            );
+
+            // Asignamos la nueva transformación al ItemDisplay
+            itemDisplay.setTransformation(newTransformation);
+
+            Bukkit.getLogger().info("Escala actualizada del ItemDisplay: " + scale);
+        }
     }
-
 }

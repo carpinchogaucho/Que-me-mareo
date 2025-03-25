@@ -25,7 +25,7 @@ public class GameManager {
     private final int maxObstacles = 10;
     private final double minEyeSize = 0.1;
     private final double eyeSizeDecrease = 0.05;
-    private final int requiredLaps = 2;
+    private final int requiredLaps = 3;
     private final JavaPlugin plugin;
     private final PlayerManager playerManager;
 
@@ -540,12 +540,35 @@ public class GameManager {
                     if (winners.contains(player)) continue;
 
                     ItemDisplayManager eye = playerEyes.get(player);
-                    if (eye != null) {
+                    if (eye != null && isInsideAnyArea(player.getLocation())) {
                         eye.lookAt(player.getLocation());
                     }
                 }
             }
         }.runTaskTimer(plugin, 0L, 20L);
+    }
+
+
+    private boolean isInsideAnyArea(Location playerLoc) {
+        for (Location[] area : eyeAreas) {
+            if (isInsideArea(playerLoc, area[0], area[1])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isInsideArea(Location loc, Location corner1, Location corner2) {
+        double minX = Math.min(corner1.getX(), corner2.getX());
+        double maxX = Math.max(corner1.getX(), corner2.getX());
+        double minY = Math.min(corner1.getY(), corner2.getY());
+        double maxY = Math.max(corner1.getY(), corner2.getY());
+        double minZ = Math.min(corner1.getZ(), corner2.getZ());
+        double maxZ = Math.max(corner1.getZ(), corner2.getZ());
+
+        return loc.getX() >= minX && loc.getX() <= maxX &&
+                loc.getY() >= minY && loc.getY() <= maxY &&
+                loc.getZ() >= minZ && loc.getZ() <= maxZ;
     }
 
     public void playerCompletedLap(Player player) {
@@ -571,7 +594,7 @@ public class GameManager {
             int laps = playerLaps.get(player);
             player.sendMessage("§bHas completado " + laps + " vueltas.");
 
-            if (laps >= requiredLaps) {
+            if (laps >= 3) {
                 shrinkEye(player);
             }
         }
@@ -589,9 +612,11 @@ public class GameManager {
             currentEyeSize -= eyeSizeDecrease;
             eye.setSize(currentEyeSize);
             player.sendMessage("§a¡El ojo se ha reducido a " + currentEyeSize + "!");
+        } else {
+            player.sendMessage("§cEl ojo ya ha alcanzado su tamaño mínimo.");
         }
 
-        if (currentEyeSize <= minEyeSize) {
+        if (currentEyeSize <= minEyeSize && !winners.contains(player)) {
             winners.add(player);
             eye.removeItemDisplay();
             playerEyes.remove(player);
@@ -599,10 +624,15 @@ public class GameManager {
             int currentPoints = playerPoints.getOrDefault(player, 0);
             playerPoints.put(player, currentPoints + 10);
 
-            player.sendMessage("¡Tu ojo ha desaparecido! Has ganado 10 puntos.");
+            player.sendMessage("§6¡Tu ojo ha desaparecido! Has ganado 10 puntos.");
 
-            player.setGameMode(GameMode.SPECTATOR);
-            player.sendMessage("Has completado la ronda y ahora estás en modo espectador.");
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    player.setGameMode(GameMode.SPECTATOR);
+                    player.sendMessage("§cHas completado la ronda y ahora estás en modo espectador.");
+                }
+            }.runTaskLater(plugin, 20L);
         }
     }
 
@@ -702,7 +732,7 @@ public class GameManager {
 
         playerManager.clearPlayers();
 
-        // 🔹 Remover ojos por nombre en el mundo
+
         for (World world : Bukkit.getWorlds()) {
             for (Entity entity : world.getEntities()) {
                 if (entity instanceof ItemDisplay itemDisplay) {
@@ -713,16 +743,16 @@ public class GameManager {
             }
         }
 
-        // 🔹 Limpiar la lista de ojos
+
         playerEyes.clear();
 
-        // 🔹 Eliminar obstáculos
+
         for (ItemDisplayManager obstacle : new ArrayList<>(obstacles)) {
             obstacle.removeItemDisplay();
         }
         obstacles.clear();
 
-        // 🔹 Restaurar velocidad de jugadores
+
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.setWalkSpeed(0.2f);
         }
