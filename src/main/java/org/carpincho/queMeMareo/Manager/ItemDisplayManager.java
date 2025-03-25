@@ -7,8 +7,10 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
+import org.carpincho.queMeMareo.QueMeMareo;
 import org.joml.Vector3f;
 
 public class ItemDisplayManager {
@@ -17,7 +19,7 @@ public class ItemDisplayManager {
     private double x, y, z;
     private float scale;
     private final float MIN_SCALE = 0.1f;
-    private final float SCALE_DECREMENT = 0.2f;
+    private final float SCALE_DECREMENT = 0.3f;
 
     public ItemDisplayManager(World world, double x, double y, double z) {
         this.x = x;
@@ -44,6 +46,29 @@ public class ItemDisplayManager {
 
 
         Bukkit.getLogger().info("Posición del ItemDisplay: " + location.toString());
+    }
+
+    public void decreaseScale() {
+        if (scale > MIN_SCALE) {
+            scale -= SCALE_DECREMENT;
+            if (scale < MIN_SCALE) {
+                scale = MIN_SCALE;
+            }
+            updateScale();
+        }
+    }
+
+    public void startShrinkingTask() {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (scale <= MIN_SCALE) {
+                    this.cancel();
+                    return;
+                }
+                decreaseScale();
+            }
+        }.runTaskTimer(QueMeMareo.getInstance(), 10L, 10L);
     }
 
     public void setSize(double size) {
@@ -108,21 +133,18 @@ public class ItemDisplayManager {
         if (itemDisplay != null) {
             Transformation currentTransformation = itemDisplay.getTransformation();
 
-            // Convertimos la escala a Vector3f
-            Vector3f newScale = new Vector3f((float) scale, (float) scale, (float) scale);
+            Vector3f newScale = new Vector3f(scale, scale, scale);
 
-            // Creamos una nueva transformación con la escala actualizada
             Transformation newTransformation = new Transformation(
                     currentTransformation.getTranslation(),
                     currentTransformation.getLeftRotation(),
-                    newScale, // Aplicamos el nuevo tamaño
+                    newScale,
                     currentTransformation.getRightRotation()
             );
 
-            // Asignamos la nueva transformación al ItemDisplay
             itemDisplay.setTransformation(newTransformation);
 
-            Bukkit.getLogger().info("Escala actualizada del ItemDisplay: " + scale);
+            Bukkit.getLogger().info("Nueva escala aplicada al ItemDisplay: " + scale);
         }
     }
 }

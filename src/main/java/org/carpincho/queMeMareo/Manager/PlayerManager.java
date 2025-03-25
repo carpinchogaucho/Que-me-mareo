@@ -1,6 +1,7 @@
 package org.carpincho.queMeMareo.Manager;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -16,7 +17,8 @@ public class PlayerManager {
     }
 
     public void addPlayerToGame(Player player) {
-        if (!player.isOp() && !activePlayers.contains(player)) {
+        if ((player.getGameMode() == GameMode.SURVIVAL || player.getGameMode() == GameMode.ADVENTURE)
+                && !activePlayers.contains(player)) {
             activePlayers.add(player);
             Bukkit.getLogger().info("Jugador añadido al juego: " + player.getName());
         }

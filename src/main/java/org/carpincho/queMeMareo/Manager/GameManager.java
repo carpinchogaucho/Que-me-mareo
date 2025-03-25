@@ -29,6 +29,7 @@ public class GameManager {
     private final JavaPlugin plugin;
     private final PlayerManager playerManager;
 
+
     private final double eyeX = 10740;
     private final double eyeZ = -23822;
     private final double obstacleTargetY = -42;
@@ -593,6 +594,7 @@ public class GameManager {
 
             int laps = playerLaps.get(player);
             player.sendMessage("§bHas completado " + laps + " vueltas.");
+            Bukkit.getLogger().info("Jugador " + player.getName() + " ha completado " + laps + " vueltas.");
 
             if (laps >= 3) {
                 shrinkEye(player);
@@ -601,38 +603,47 @@ public class GameManager {
     }
 
     private void shrinkEye(Player player) {
-        if (!playerEyes.containsKey(player)) return;
+        ItemDisplayManager displayManager = playerEyes.get(player);
 
-        ItemDisplayManager eye = playerEyes.get(player);
-        double currentEyeSize = eye.getSize();
+        if (displayManager != null) {
+            player.sendMessage("§6Tu ojo de Ender comienza a encogerse...");
+            displayManager.startShrinkingTask();
 
-        player.sendMessage("§eTamaño actual del ojo: " + currentEyeSize);
+            ItemDisplayManager eye = playerEyes.get(player);
+            double currentEyeSize = eye.getSize();
 
-        if (currentEyeSize > minEyeSize) {
-            currentEyeSize -= eyeSizeDecrease;
-            eye.setSize(currentEyeSize);
-            player.sendMessage("§a¡El ojo se ha reducido a " + currentEyeSize + "!");
-        } else {
-            player.sendMessage("§cEl ojo ya ha alcanzado su tamaño mínimo.");
-        }
+            player.sendMessage("§eTamaño actual del ojo: " + currentEyeSize);
+            Bukkit.getLogger().info("Tamaño actual del ojo de " + player.getName() + ": " + currentEyeSize);
 
-        if (currentEyeSize <= minEyeSize && !winners.contains(player)) {
-            winners.add(player);
-            eye.removeItemDisplay();
-            playerEyes.remove(player);
+            if (currentEyeSize > minEyeSize) {
+                currentEyeSize -= eyeSizeDecrease;
+                eye.setSize(currentEyeSize);
+                player.sendMessage("§a¡El ojo se ha reducido a " + currentEyeSize + "!");
+                Bukkit.getLogger().info("Ojo de " + player.getName() + " reducido a " + currentEyeSize);
+            } else {
+                player.sendMessage("§cEl ojo ya ha alcanzado su tamaño mínimo.");
+                Bukkit.getLogger().info("Ojo de " + player.getName() + " ya está en su tamaño mínimo.");
+            }
 
-            int currentPoints = playerPoints.getOrDefault(player, 0);
-            playerPoints.put(player, currentPoints + 10);
+            if (currentEyeSize <= minEyeSize && !winners.contains(player)) {
+                winners.add(player);
+                eye.removeItemDisplay();
+                playerEyes.remove(player);
 
-            player.sendMessage("§6¡Tu ojo ha desaparecido! Has ganado 10 puntos.");
+                int currentPoints = playerPoints.getOrDefault(player, 0);
+                playerPoints.put(player, currentPoints + 10);
 
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    player.setGameMode(GameMode.SPECTATOR);
-                    player.sendMessage("§cHas completado la ronda y ahora estás en modo espectador.");
-                }
-            }.runTaskLater(plugin, 20L);
+                player.sendMessage("§6¡Tu ojo ha desaparecido! Has ganado 10 puntos.");
+                Bukkit.getLogger().info("Jugador " + player.getName() + " ha ganado la partida.");
+
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        player.setGameMode(GameMode.SPECTATOR);
+                        player.sendMessage("§cHas completado la ronda y ahora estás en modo espectador.");
+                    }
+                }.runTaskLater(plugin, 20L);
+            }
         }
     }
 
@@ -744,6 +755,7 @@ public class GameManager {
         }
 
 
+
         playerEyes.clear();
 
 
@@ -763,6 +775,7 @@ public class GameManager {
         playerQuadrants.clear();
         winners.clear();
         playerPoints.clear();
+
 
         Bukkit.getOnlinePlayers().forEach(player -> player.sendMessage("¡El juego ha sido detenido!"));
         Bukkit.getLogger().info("El juego se ha detenido por completo.");

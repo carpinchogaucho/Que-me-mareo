@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.carpincho.queMeMareo.Listener.PlayerListener;
 import org.carpincho.queMeMareo.Manager.GameManager;
+import org.carpincho.queMeMareo.Manager.ItemDisplayManager;
 import org.carpincho.queMeMareo.MissUniverso.Listener.GameListener;
 import org.carpincho.queMeMareo.MissUniverso.commandMissUniverso.BalanceRegisterCommand;
 import org.carpincho.queMeMareo.MissUniverso.commandMissUniverso.BalanceStartCommand;
