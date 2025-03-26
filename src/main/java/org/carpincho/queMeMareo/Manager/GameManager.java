@@ -28,6 +28,7 @@ public class GameManager {
     private final int requiredLaps = 3;
     private final JavaPlugin plugin;
     private final PlayerManager playerManager;
+    private ItemDisplayManager eye;
 
 
     private final double eyeX = 10740;
@@ -734,6 +735,10 @@ public class GameManager {
 
     public List<ItemDisplayManager> getObstacles() {
         return obstacles;
+    }
+
+    public ItemDisplayManager getEye() {
+        return eye;
     }
 
     public void stopGame() {

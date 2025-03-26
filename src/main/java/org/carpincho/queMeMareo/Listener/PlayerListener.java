@@ -1,5 +1,7 @@
 package org.carpincho.queMeMareo.Listener;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -39,12 +41,17 @@ public class PlayerListener implements Listener {
     }
 
     private boolean isNearEye(Player player) {
-        double eyeX = 10739;
-        double eyeY = -43;
-        double eyeZ = -23823;
 
-        double distance = player.getLocation().distanceSquared(new org.bukkit.Location(player.getWorld(), eyeX, eyeY, eyeZ));
+        ItemDisplayManager eye = GameManager.getInstance(plugin).getEye();
 
+
+        if (eye == null) {
+            Bukkit.getLogger().warning("⚠️ eye es null en isNearEye()");
+            return false;
+        }
+
+        Location eyeLocation = eye.getLocation();
+        double distance = player.getLocation().distanceSquared(eyeLocation);
         return distance <= 100;
     }
 }
