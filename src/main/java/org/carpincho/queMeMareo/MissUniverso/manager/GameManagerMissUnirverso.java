@@ -5,6 +5,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.carpincho.queMeMareo.QueMeMareo;
 
 import java.util.HashMap;
@@ -16,6 +17,7 @@ public class GameManagerMissUnirverso {
     private final HashMap<UUID, BalanceItemManager> playersItems;
     private final HashMap<UUID, Integer> playerScore;
     private boolean playing;
+    private BukkitTask currentTask;
 
     public GameManagerMissUnirverso(QueMeMareo plugin) {
         this.plugin = plugin;
@@ -44,15 +46,18 @@ public class GameManagerMissUnirverso {
     public void start(int round) {
         playing = true;
         currentRound = round;
-        playersItems.clear();
 
+
+        if (currentTask != null && !currentTask.isCancelled()) {
+            currentTask.cancel();
+        }
+
+        playersItems.clear();
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player.getGameMode() == GameMode.SURVIVAL || player.getGameMode() == GameMode.ADVENTURE) {
-
                 UUID playerUUID = player.getUniqueId();
                 Location playerLocation = player.getLocation();
-
 
                 BalanceItemManager balanceItemManager = new BalanceItemManager(playerUUID, playerLocation);
                 playersItems.put(playerUUID, balanceItemManager);
@@ -78,7 +83,8 @@ public class GameManagerMissUnirverso {
             }
         }
 
-        new BukkitRunnable() {
+
+        currentTask = new BukkitRunnable() {
             @Override
             public void run() {
                 stop();
