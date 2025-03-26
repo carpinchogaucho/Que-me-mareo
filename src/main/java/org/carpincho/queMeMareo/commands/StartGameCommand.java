@@ -6,8 +6,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
-import org.carpincho.queMeMareo.QueMeMareo;
 import org.carpincho.queMeMareo.Manager.GameManager;
+import org.carpincho.queMeMareo.QueMeMareo;
+
 
 public class StartGameCommand implements CommandExecutor {
 

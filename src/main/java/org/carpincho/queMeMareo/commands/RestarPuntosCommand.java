@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.carpincho.queMeMareo.Manager.GameManager;
 
+
 public class RestarPuntosCommand implements CommandExecutor {
 
     @Override

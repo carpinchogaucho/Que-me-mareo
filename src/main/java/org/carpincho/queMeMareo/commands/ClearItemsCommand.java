@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.carpincho.queMeMareo.Manager.GameManager;
 
+
 public class ClearItemsCommand implements CommandExecutor {
 
     private final GameManager gameManager;
