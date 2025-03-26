@@ -45,7 +45,7 @@ public class ItemDisplayManager {
         itemDisplay.setTransformation(transformation);
 
 
-        Bukkit.getLogger().info("Posición del ItemDisplay: " + location.toString());
+
     }
 
     public void decreaseScale() {
@@ -110,7 +110,7 @@ public class ItemDisplayManager {
         itemDisplay.teleport(eyeLocation);
 
 
-        Bukkit.getLogger().info("Rotación ajustada: yaw=" + yaw + ", pitch=" + pitch);
+
     }
 
     public Location getLocation() {
@@ -120,7 +120,7 @@ public class ItemDisplayManager {
     public void updatePosition(double x, double y, double z) {
         Location newLocation = new Location(itemDisplay.getWorld(), x, y, z);
         itemDisplay.teleport(newLocation);
-        Bukkit.getLogger().info("Posición actualizada del ItemDisplay: " + newLocation.toString());
+
     }
 
     public void removeItemDisplay() {

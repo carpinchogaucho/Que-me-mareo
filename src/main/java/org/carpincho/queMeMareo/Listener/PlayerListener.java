@@ -47,7 +47,6 @@ public class PlayerListener implements Listener {
 
 
         if (eye == null) {
-            Bukkit.getLogger().warning("⚠️ eye es null en isNearEye()");
             return false;
         }
 

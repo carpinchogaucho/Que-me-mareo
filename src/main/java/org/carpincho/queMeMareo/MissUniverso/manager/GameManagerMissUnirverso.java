@@ -44,7 +44,7 @@ public class GameManagerMissUnirverso {
     public void start(int round) {
         playing = true;
         currentRound = round;
-        playersItems.clear(); // Limpiar datos previos
+        playersItems.clear();
 
 
         for (Player player : Bukkit.getOnlinePlayers()) {

@@ -20,6 +20,7 @@ public class QueMeMareo extends JavaPlugin {
     private GameManager gameManager;
     public GameManagerMissUnirverso GameManagerMissUnirverso;
 
+
     @Override
     public void onEnable() {
         instance = this;
@@ -28,6 +29,8 @@ public class QueMeMareo extends JavaPlugin {
         gameManager = GameManager.getInstance(this);
 
         GameManagerMissUnirverso = new GameManagerMissUnirverso(this);
+
+
 
 
 
