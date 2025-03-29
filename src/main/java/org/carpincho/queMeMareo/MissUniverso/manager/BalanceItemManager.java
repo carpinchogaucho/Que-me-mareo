@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.carpincho.queMeMareo.QueMeMareo;
 
@@ -33,13 +34,15 @@ public class BalanceItemManager {
     public BalanceItemManager(UUID uuid, Location location) {
         this.playerUuid = uuid;
         this.itemDisplay = location.getWorld().spawn(location, ItemDisplay.class);
-        this.itemDisplay.setItemStack(new ItemStack(Material.BOOK));
         this.tilt = 0.0;
         this.tiltSpeed = 0.01;
         this.stableTicks = 0;
         this.isStable = false;
         this.stableTicksThreshold = 60 + (int)(Math.random() * 41);
         disappear(true);
+
+        int randomModelData = 1000 + (int) (Math.random() * 10);
+        SetCustomModelData((randomModelData));
     }
 
     public ItemDisplay getItemDisplay() {
@@ -53,6 +56,17 @@ public class BalanceItemManager {
     public BalanceAxis getBalanceAxis() {
         return balanceAxis;
     }
+
+    public void SetCustomModelData(int CustomModelData) {
+        ItemStack itemStack = new ItemStack(Material.IRON_NUGGET);
+        ItemMeta meta = itemStack.getItemMeta();
+        if (meta != null) {
+            meta.setCustomModelData(CustomModelData);
+            itemStack.setItemMeta(meta);
+        }
+        this.itemDisplay.setItemStack(itemStack);
+    }
+
 
     public void setTilt(double tilt) {
         this.tilt = tilt;
