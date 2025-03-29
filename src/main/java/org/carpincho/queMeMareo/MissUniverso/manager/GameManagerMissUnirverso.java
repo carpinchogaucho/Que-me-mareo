@@ -120,6 +120,6 @@ public class GameManagerMissUnirverso {
 
 
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "restarPuntos " + player.getName());
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playglow red 1 3 1 50 75 " + player.getName());
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playglow " + player.getName() + " red 1 3 1 50 75");
     }
 }
