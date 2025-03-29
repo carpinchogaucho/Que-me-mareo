@@ -116,9 +116,10 @@ public class GameManagerMissUnirverso {
         if (!playersItems.containsKey(player.getUniqueId())) return;
 
         player.sendMessage("¡Perdiste el libro! Pasaste al modo espectador.");
-        player.setGameMode(GameMode.SPECTATOR);
+
 
 
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "restarPuntos " + player.getName());
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playglow red 1 3 1 50 75 " + player.getName());
     }
 }

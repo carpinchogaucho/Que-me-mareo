@@ -101,7 +101,7 @@ public class BalanceItemManager {
         Player player = Bukkit.getPlayer(playerUuid);
         if (player == null) return;
 
-        Location newLoc = player.getLocation().clone().add(0, 2, 0);
+        Location newLoc = player.getLocation().clone().add(0, 2.3, 0);
         this.itemDisplay.teleport(newLoc);
 
         if (Math.abs(this.tilt) < balanceThreshold) {
