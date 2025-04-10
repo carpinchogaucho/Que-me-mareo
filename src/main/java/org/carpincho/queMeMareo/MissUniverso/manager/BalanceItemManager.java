@@ -31,18 +31,33 @@ public class BalanceItemManager {
 
     private BalanceAxis balanceAxis = BalanceAxis.X;
 
-    public BalanceItemManager(UUID uuid, Location location) {
+    public BalanceItemManager(UUID uuid, Location location, int round) {
         this.playerUuid = uuid;
         this.itemDisplay = location.getWorld().spawn(location, ItemDisplay.class);
         this.tilt = 0.0;
         this.tiltSpeed = 0.01;
         this.stableTicks = 0;
         this.isStable = false;
-        this.stableTicksThreshold = 60 + (int)(Math.random() * 41);
+        this.stableTicksThreshold = 60 + (int) (Math.random() * 41);
         disappear(true);
 
-        int randomModelData = 1000 + (int) (Math.random() * 10);
-        SetCustomModelData((randomModelData));
+        int customModelData;
+        switch (round) {
+            case 1:
+                customModelData = 1007;
+                break;
+            case 2:
+                customModelData = 1008;
+                break;
+            case 3:
+                customModelData = 1009;
+                break;
+            default:
+                customModelData = 1000 + (int) (Math.random() * 10);
+                break;
+        }
+
+        SetCustomModelData(customModelData);
     }
 
     public ItemDisplay getItemDisplay() {
@@ -66,7 +81,6 @@ public class BalanceItemManager {
         }
         this.itemDisplay.setItemStack(itemStack);
     }
-
 
     public void setTilt(double tilt) {
         this.tilt = tilt;
@@ -108,13 +122,15 @@ public class BalanceItemManager {
             if (!isStable) {
                 isStable = true;
                 stableTicks = 0;
-                stableTicksThreshold = 60 + (int)(Math.random() * 41);
+                stableTicksThreshold = 60 + (int) (Math.random() * 41);
                 tiltSpeed = 0;
             }
 
             stableTicks++;
             if (stableTicks % 20 == 0) {
-                player.sendMessage("¡Estás equilibrado! +1 punto");
+                player.sendActionBar("§a+1 punto por equilibrio");
+
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playglow " + player.getName() + " green 1 1 1 50 50");
 
                 GameManagerMissUnirverso GameManagerMissUnirverso = QueMeMareo.getInstance().getGameManagerMissUnirverso();
 
@@ -185,5 +201,4 @@ public class BalanceItemManager {
             }
         }.runTaskTimer(QueMeMareo.getInstance(), 0L, 1L);
     }
-
 }

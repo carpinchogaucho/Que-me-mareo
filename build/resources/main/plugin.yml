@@ -43,8 +43,3 @@ commands:
     usage: /stopmissuniverso
     permission: queMeMareo.stop
 
-  balance-register:
-    description: Registra jugadores.
-    usage: /balance-register [player]
-    permission: bookbalance.admin
-    permission-message: No tienes permiso para usar este comando.

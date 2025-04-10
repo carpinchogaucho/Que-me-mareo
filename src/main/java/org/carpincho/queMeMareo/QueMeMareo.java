@@ -5,7 +5,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.carpincho.queMeMareo.Listener.PlayerListener;
 import org.carpincho.queMeMareo.Manager.GameManager;
 import org.carpincho.queMeMareo.MissUniverso.Listener.GameListener;
-import org.carpincho.queMeMareo.MissUniverso.commandMissUniverso.BalanceRegisterCommand;
 import org.carpincho.queMeMareo.MissUniverso.commandMissUniverso.BalanceStartCommand;
 import org.carpincho.queMeMareo.MissUniverso.commandMissUniverso.StopMissUniverso;
 import org.carpincho.queMeMareo.MissUniverso.manager.GameManagerMissUnirverso;
@@ -40,7 +39,6 @@ public class QueMeMareo extends JavaPlugin {
 
         //MISS UNIVERSO
         this.getCommand("balance-start").setExecutor(new BalanceStartCommand(this));
-        this.getCommand("balance-register").setExecutor(new BalanceRegisterCommand(this));
         getCommand("stopmissuniverso").setExecutor(new StopMissUniverso(GameManagerMissUnirverso));
 
         //QUE ME MAREO

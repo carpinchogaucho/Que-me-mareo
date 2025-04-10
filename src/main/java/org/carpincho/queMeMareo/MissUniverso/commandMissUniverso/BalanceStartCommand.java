@@ -23,7 +23,7 @@ public class BalanceStartCommand implements CommandExecutor {
         GameManagerMissUnirverso gameManager = plugin.getGameManagerMissUnirverso();
         gameManager.start(round);
 
-        sender.sendMessage("Game started! Try to balance the book.");
+
 
         return true;
     }

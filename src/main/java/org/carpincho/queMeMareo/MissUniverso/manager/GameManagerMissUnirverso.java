@@ -47,7 +47,6 @@ public class GameManagerMissUnirverso {
         playing = true;
         currentRound = round;
 
-
         if (currentTask != null && !currentTask.isCancelled()) {
             currentTask.cancel();
         }
@@ -59,29 +58,40 @@ public class GameManagerMissUnirverso {
                 UUID playerUUID = player.getUniqueId();
                 Location playerLocation = player.getLocation();
 
-                BalanceItemManager balanceItemManager = new BalanceItemManager(playerUUID, playerLocation);
+
+                BalanceItemManager balanceItemManager = new BalanceItemManager(playerUUID, playerLocation, round);
                 playersItems.put(playerUUID, balanceItemManager);
+
 
                 switch (round) {
                     case 1:
                         balanceItemManager.setBalanceAxis(BalanceItemManager.BalanceAxis.X);
                         balanceItemManager.setTiltSpeed(0.01 * currentRound);
+                        balanceItemManager.SetCustomModelData(1007);
                         break;
                     case 2:
                         balanceItemManager.setBalanceAxis(BalanceItemManager.BalanceAxis.Z);
                         balanceItemManager.setTiltSpeed(0.01 * currentRound);
+                        balanceItemManager.SetCustomModelData(1008);
+                        break;
+                    case 3:
+                        balanceItemManager.setBalanceAxis(BalanceItemManager.BalanceAxis.X);
+                        balanceItemManager.setTiltSpeed(0.02 * currentRound);
+                        balanceItemManager.SetCustomModelData(1009);
                         break;
                     default:
                         balanceItemManager.setBalanceAxis(BalanceItemManager.BalanceAxis.X);
                         balanceItemManager.setTiltSpeed(0.02 * currentRound);
+                        balanceItemManager.SetCustomModelData(1009);
                         break;
                 }
 
-                player.sendMessage("¡La ronda " + currentRound + " ha comenzado!");
+
                 balanceItemManager.disappear(false);
                 balanceItemManager.startBalancing();
             }
         }
+
 
 
         currentTask = new BukkitRunnable() {
@@ -100,7 +110,7 @@ public class GameManagerMissUnirverso {
             Player p = Bukkit.getPlayer(uuid);
             if (p == null) return;
 
-            p.sendMessage("¡La ronda " + currentRound + " ha terminado!");
+            p.sendActionBar("¡La ronda " + currentRound + " ha terminado!");
             balanceItemManager.reset();
         });
 
@@ -115,7 +125,7 @@ public class GameManagerMissUnirverso {
     public void onBookFall(Player player) {
         if (!playersItems.containsKey(player.getUniqueId())) return;
 
-        player.sendMessage("¡Perdiste el libro! Pasaste al modo espectador.");
+        player.sendActionBar("§c¡Perdiste el libro!");
 
 
 

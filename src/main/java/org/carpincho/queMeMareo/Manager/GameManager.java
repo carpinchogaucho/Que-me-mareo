@@ -20,6 +20,7 @@ public class GameManager {
     private final Map<Player, Set<String>> playerQuadrants = new HashMap<>();
     private final Set<Player> winners = new HashSet<>();
     private final Map<Player, Integer> playerPoints = new HashMap<>();
+    private final Map<UUID, Integer> playerScore = new HashMap<>();
 
     private final Random random;
     private final int maxObstacles = 10;
@@ -649,11 +650,14 @@ public class GameManager {
     }
 
     public void removePoints(Player player, int amount) {
-        int currentPoints = playerPoints.getOrDefault(player, 0);
+        UUID uuid = player.getUniqueId();
+        int currentPoints = playerScore.getOrDefault(uuid, 0);
         int newPoints = Math.max(0, currentPoints - amount);
-        playerPoints.put(player, newPoints);
 
-        player.sendMessage("Te han restado " + amount + " puntos. Ahora tienes: " + newPoints);
+        playerScore.put(uuid, newPoints);
+
+
+        player.sendActionBar("§c-" + amount + " puntos");
     }
 
     private void spawnObstacles() {

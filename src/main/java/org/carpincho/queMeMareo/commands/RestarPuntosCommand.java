@@ -24,7 +24,11 @@ public class RestarPuntosCommand implements CommandExecutor {
         }
 
         GameManager.getInstance(null).removePoints(target, 20);
-        sender.sendMessage("Has restado 20 puntos a " + target.getName());
+        if (sender instanceof Player playerSender) {
+            playerSender.sendActionBar("§e-20 puntos a §l" + target.getName());
+        } else {
+            sender.sendMessage("Has restado 20 puntos a " + target.getName());
+        }
         return true;
     }
 }
