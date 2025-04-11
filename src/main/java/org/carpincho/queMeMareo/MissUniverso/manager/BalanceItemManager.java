@@ -28,6 +28,7 @@ public class BalanceItemManager {
     private int stableTicks;
     private int stableTicksThreshold;
     private boolean isStable;
+    private final int round;
 
     private BalanceAxis balanceAxis = BalanceAxis.X;
 
@@ -39,6 +40,8 @@ public class BalanceItemManager {
         this.stableTicks = 0;
         this.isStable = false;
         this.stableTicksThreshold = 60 + (int) (Math.random() * 41);
+        this.round = round;
+
         disappear(true);
 
         int customModelData;
@@ -143,8 +146,15 @@ public class BalanceItemManager {
                 isStable = false;
                 stableTicks = 0;
                 double sign = Math.random() < 0.5 ? 1.0 : -1.0;
-                tilt = sign * (balanceThreshold + 0.01);
-                tiltSpeed = sign * 0.01;
+
+               
+                if (round == 2) {
+                    tilt = sign * (balanceThreshold + 0.01);
+                    tiltSpeed = sign * 0.02;
+                } else {
+                    tilt = sign * (balanceThreshold + 0.01);
+                    tiltSpeed = sign * 0.01;
+                }
             }
         } else {
             isStable = false;
