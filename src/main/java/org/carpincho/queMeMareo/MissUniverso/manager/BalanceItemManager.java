@@ -29,6 +29,7 @@ public class BalanceItemManager {
     private int stableTicksThreshold;
     private boolean isStable;
     private final int round;
+    private int ticksBeforeRestart = -1;
 
     private BalanceAxis balanceAxis = BalanceAxis.X;
 
@@ -125,7 +126,8 @@ public class BalanceItemManager {
             if (!isStable) {
                 isStable = true;
                 stableTicks = 0;
-                stableTicksThreshold = 60 + (int) (Math.random() * 41);
+                stableTicksThreshold = 20 + (int) (Math.random() * 11);
+                ticksBeforeRestart = -1;
                 tiltSpeed = 0;
             }
 
@@ -136,29 +138,37 @@ public class BalanceItemManager {
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playglow " + player.getName() + " green 1 1 1 50 50");
 
                 GameManagerMissUnirverso GameManagerMissUnirverso = QueMeMareo.getInstance().getGameManagerMissUnirverso();
-
                 GameManagerMissUnirverso.getPlayerScore().put(
                         playerUuid,
                         GameManagerMissUnirverso.getPlayerScore().getOrDefault(playerUuid, 0) + 1);
             }
 
             if (stableTicks >= stableTicksThreshold) {
-                isStable = false;
-                stableTicks = 0;
-                double sign = Math.random() < 0.5 ? 1.0 : -1.0;
 
-               
-                if (round == 2) {
-                    tilt = sign * (balanceThreshold + 0.01);
-                    tiltSpeed = sign * 0.02;
+                if (ticksBeforeRestart == -1) {
+                    ticksBeforeRestart = 5 + (int) (Math.random() * 6); // 3 a 6 ticks
                 } else {
-                    tilt = sign * (balanceThreshold + 0.01);
-                    tiltSpeed = sign * 0.01;
+                    ticksBeforeRestart--;
+                    if (ticksBeforeRestart <= 0) {
+                        isStable = false;
+                        stableTicks = 0;
+                        ticksBeforeRestart = -1;
+
+                        double sign = Math.random() < 0.5 ? 1.0 : -1.0;
+                        if (round == 2) {
+                            tilt = sign * (balanceThreshold + 0.01);
+                            tiltSpeed = sign * 0.02;
+                        } else {
+                            tilt = sign * (balanceThreshold + 0.01);
+                            tiltSpeed = sign * 0.01;
+                        }
+                    }
                 }
             }
         } else {
             isStable = false;
             stableTicks = 0;
+            ticksBeforeRestart = -1;
             tilt += tiltSpeed;
         }
 
