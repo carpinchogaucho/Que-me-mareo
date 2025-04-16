@@ -31,6 +31,9 @@ public class BalanceItemManager {
     private final int round;
     private int ticksBeforeRestart = -1;
 
+    private int unstableTicks = 0;
+    private final int maxUnstableTicks = 60;
+
     private BalanceAxis balanceAxis = BalanceAxis.X;
 
     public BalanceItemManager(UUID uuid, Location location, int round) {
@@ -40,25 +43,17 @@ public class BalanceItemManager {
         this.tiltSpeed = 0.01;
         this.stableTicks = 0;
         this.isStable = false;
-        this.stableTicksThreshold = 60 + (int) (Math.random() * 41);
+        this.stableTicksThreshold = 20 + (int) (Math.random() * 11);
         this.round = round;
 
         disappear(true);
 
         int customModelData;
         switch (round) {
-            case 1:
-                customModelData = 1007;
-                break;
-            case 2:
-                customModelData = 1008;
-                break;
-            case 3:
-                customModelData = 1009;
-                break;
-            default:
-                customModelData = 1000 + (int) (Math.random() * 10);
-                break;
+            case 1: customModelData = 1007; break;
+            case 2: customModelData = 1008; break;
+            case 3: customModelData = 1009; break;
+            default: customModelData = 1000 + (int) (Math.random() * 10); break;
         }
 
         SetCustomModelData(customModelData);
@@ -108,6 +103,7 @@ public class BalanceItemManager {
     public void reset() {
         this.tilt = 0.0;
         this.stableTicks = 0;
+        this.unstableTicks = 0;
         this.isStable = false;
         setTilt(this.tilt);
         this.tiltSpeed = 0.01;
@@ -115,7 +111,6 @@ public class BalanceItemManager {
     }
 
     public void update() {
-
         Player player = Bukkit.getPlayer(playerUuid);
         if (player == null) return;
 
@@ -129,24 +124,22 @@ public class BalanceItemManager {
                 stableTicksThreshold = 20 + (int) (Math.random() * 11);
                 ticksBeforeRestart = -1;
                 tiltSpeed = 0;
+                unstableTicks = 0;
             }
 
             stableTicks++;
             if (stableTicks % 20 == 0) {
                 player.sendActionBar("§a+1 punto por equilibrio");
-
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playglow " + player.getName() + " green 1 1 1 50 50");
 
-                GameManagerMissUnirverso GameManagerMissUnirverso = QueMeMareo.getInstance().getGameManagerMissUnirverso();
-                GameManagerMissUnirverso.getPlayerScore().put(
+                QueMeMareo.getInstance().getGameManagerMissUnirverso().getPlayerScore().put(
                         playerUuid,
-                        GameManagerMissUnirverso.getPlayerScore().getOrDefault(playerUuid, 0) + 1);
+                        QueMeMareo.getInstance().getGameManagerMissUnirverso().getPlayerScore().getOrDefault(playerUuid, 0) + 1);
             }
 
             if (stableTicks >= stableTicksThreshold) {
-
                 if (ticksBeforeRestart == -1) {
-                    ticksBeforeRestart = 5 + (int) (Math.random() * 6); // 3 a 6 ticks
+                    ticksBeforeRestart = (round == 3) ? 3 + (int) (Math.random() * 3) : 5 + (int) (Math.random() * 6);
                 } else {
                     ticksBeforeRestart--;
                     if (ticksBeforeRestart <= 0) {
@@ -155,11 +148,12 @@ public class BalanceItemManager {
                         ticksBeforeRestart = -1;
 
                         double sign = Math.random() < 0.5 ? 1.0 : -1.0;
+                        tilt = sign * (balanceThreshold + 0.01);
                         if (round == 2) {
-                            tilt = sign * (balanceThreshold + 0.01);
                             tiltSpeed = sign * 0.02;
+                        } else if (round == 3) {
+                            tiltSpeed = sign * (0.03 + Math.random() * 0.015); // 0.03 - 0.045
                         } else {
-                            tilt = sign * (balanceThreshold + 0.01);
                             tiltSpeed = sign * 0.01;
                         }
                     }
@@ -169,14 +163,22 @@ public class BalanceItemManager {
             isStable = false;
             stableTicks = 0;
             ticksBeforeRestart = -1;
-            tilt += tiltSpeed;
+
+            unstableTicks++;
+            int maxTicks = (round == 3) ? 40 : maxUnstableTicks;
+
+            if (unstableTicks >= maxTicks) {
+                double sign = Math.random() < 0.5 ? 1.0 : -1.0;
+                tilt += sign * 0.01;
+            } else {
+                tilt += tiltSpeed;
+            }
         }
 
         if (Math.abs(tilt) > maxTilt) {
             player = Bukkit.getPlayer(playerUuid);
             if (player != null) {
-                GameManagerMissUnirverso gameManager = QueMeMareo.getInstance().getGameManagerMissUnirverso();
-                gameManager.onBookFall(player);
+                QueMeMareo.getInstance().getGameManagerMissUnirverso().onBookFall(player);
             }
             disappear(true);
             return;
