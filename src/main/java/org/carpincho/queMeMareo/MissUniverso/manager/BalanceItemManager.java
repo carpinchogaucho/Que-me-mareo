@@ -123,8 +123,11 @@ public class BalanceItemManager {
                 stableTicks = 0;
                 stableTicksThreshold = 20 + (int) (Math.random() * 11);
                 ticksBeforeRestart = -1;
-                tiltSpeed = 0;
                 unstableTicks = 0;
+
+                // Oscilación suave aunque esté "estable"
+                double sign = Math.random() < 0.5 ? 1.0 : -1.0;
+                tiltSpeed = sign * (0.003 + Math.random() * 0.002); // 0.003 - 0.005
             }
 
             stableTicks++;
@@ -136,6 +139,9 @@ public class BalanceItemManager {
                         playerUuid,
                         QueMeMareo.getInstance().getGameManagerMissUnirverso().getPlayerScore().getOrDefault(playerUuid, 0) + 1);
             }
+
+            // Sigue moviéndose suavemente aunque esté estable
+            tilt += tiltSpeed;
 
             if (stableTicks >= stableTicksThreshold) {
                 if (ticksBeforeRestart == -1) {
@@ -155,6 +161,11 @@ public class BalanceItemManager {
                             tiltSpeed = sign * (0.03 + Math.random() * 0.015); // 0.03 - 0.045
                         } else {
                             tiltSpeed = sign * 0.01;
+                        }
+
+                        // Cambio ocasional de eje
+                        if (Math.random() < 0.2) {
+                            balanceAxis = (balanceAxis == BalanceAxis.X) ? BalanceAxis.Z : BalanceAxis.X;
                         }
                     }
                 }
