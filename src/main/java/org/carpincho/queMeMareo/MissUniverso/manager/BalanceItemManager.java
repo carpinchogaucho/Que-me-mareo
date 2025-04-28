@@ -125,9 +125,9 @@ public class BalanceItemManager {
                 ticksBeforeRestart = -1;
                 unstableTicks = 0;
 
-                // Oscilación suave aunque esté "estable"
+
                 double sign = Math.random() < 0.5 ? 1.0 : -1.0;
-                tiltSpeed = sign * (0.003 + Math.random() * 0.002); // 0.003 - 0.005
+                tiltSpeed = sign * (0.003 + Math.random() * 0.002);
             }
 
             stableTicks++;
@@ -136,7 +136,7 @@ public class BalanceItemManager {
                 if (round == 2) {
                     pointsToAdd = 2;
                 } else if (round == 3) {
-                    pointsToAdd = 3; 
+                    pointsToAdd = 3;
                 }
 
                 player.sendActionBar("§a+" + pointsToAdd + " punto(s) por equilibrio");
@@ -147,7 +147,7 @@ public class BalanceItemManager {
                         QueMeMareo.getInstance().getGameManagerMissUnirverso().getPlayerScore().getOrDefault(playerUuid, 0) + pointsToAdd);
             }
 
-            // Sigue moviéndose suavemente aunque esté estable
+
             tilt += tiltSpeed;
 
             if (stableTicks >= stableTicksThreshold) {
@@ -165,12 +165,12 @@ public class BalanceItemManager {
                         if (round == 2) {
                             tiltSpeed = sign * 0.02;
                         } else if (round == 3) {
-                            tiltSpeed = sign * (0.03 + Math.random() * 0.015); // 0.03 - 0.045
+                            tiltSpeed = sign * (0.03 + Math.random() * 0.015);
                         } else {
                             tiltSpeed = sign * 0.01;
                         }
 
-                        // Cambio ocasional de eje
+                        
                         if (Math.random() < 0.2) {
                             balanceAxis = (balanceAxis == BalanceAxis.X) ? BalanceAxis.Z : BalanceAxis.X;
                         }
