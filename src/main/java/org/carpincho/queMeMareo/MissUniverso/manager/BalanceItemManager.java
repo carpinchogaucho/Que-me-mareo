@@ -132,12 +132,19 @@ public class BalanceItemManager {
 
             stableTicks++;
             if (stableTicks % 20 == 0) {
-                player.sendActionBar("§a+1 punto por equilibrio");
+                int pointsToAdd = 1;
+                if (round == 2) {
+                    pointsToAdd = 2;
+                } else if (round == 3) {
+                    pointsToAdd = 3; 
+                }
+
+                player.sendActionBar("§a+" + pointsToAdd + " punto(s) por equilibrio");
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "playglow " + player.getName() + " green 1 1 1 50 50");
 
                 QueMeMareo.getInstance().getGameManagerMissUnirverso().getPlayerScore().put(
                         playerUuid,
-                        QueMeMareo.getInstance().getGameManagerMissUnirverso().getPlayerScore().getOrDefault(playerUuid, 0) + 1);
+                        QueMeMareo.getInstance().getGameManagerMissUnirverso().getPlayerScore().getOrDefault(playerUuid, 0) + pointsToAdd);
             }
 
             // Sigue moviéndose suavemente aunque esté estable
